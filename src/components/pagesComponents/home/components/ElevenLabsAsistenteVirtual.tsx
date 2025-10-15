@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useElevenLabsAgent } from '../../../../hooks/useElevenLabs';
+import React, { useState } from "react";
+import { useElevenLabsAgent } from "../../../../hooks/useElevenLabs";
 import {
   AgentHeader,
   ConnectionControls,
@@ -9,22 +9,24 @@ import {
   MessageInput,
   ErrorDisplay,
   UseCaseInfo,
-  MicButton
-} from '../../../../components/shared';
+  MicButton,
+} from "../../../../components/shared";
 
 const ElevenLabsAsistenteVirtual = () => {
-  const [userMessage, setUserMessage] = useState('');
-  const [conversationHistory, setConversationHistory] = useState<Array<{
-    type: 'user' | 'agent';
-    message: string;
-    timestamp: Date;
-  }>>([]);
+  const [userMessage, setUserMessage] = useState("");
+  const [conversationHistory, setConversationHistory] = useState<
+    Array<{
+      type: "user" | "agent";
+      message: string;
+      timestamp: Date;
+    }>
+  >([]);
   const [quickActions] = useState([
-    '¿Qué puedes hacer por mí?',
-    'Cuéntame sobre el clima',
-    'Ayúdame con una tarea',
-    'Explícame algo',
-    'Cuéntame un chiste'
+    "¿Qué puedes hacer por mí?",
+    "Cuéntame sobre el clima",
+    "Ayúdame con una tarea",
+    "Explícame algo",
+    "Cuéntame un chiste",
   ]);
 
   const {
@@ -39,35 +41,41 @@ const ElevenLabsAsistenteVirtual = () => {
     stopConversation,
     sendMessage,
     toggleMute,
-    isMuted
-  } = useElevenLabsAgent('asistente-virtual');
+    isMuted,
+  } = useElevenLabsAgent("asistente-virtual");
 
   const handleSendMessage = () => {
-    if (userMessage.trim() && isConnected) {      
-      setConversationHistory(prev => [...prev, {
-        type: 'user',
-        message: userMessage,
-        timestamp: new Date()
-      }]);
-            
+    if (userMessage.trim() && isConnected) {
+      setConversationHistory((prev) => [
+        ...prev,
+        {
+          type: "user",
+          message: userMessage,
+          timestamp: new Date(),
+        },
+      ]);
+
       sendMessage(userMessage);
-      setUserMessage('');
+      setUserMessage("");
     }
   };
 
   const handleQuickAction = (action: string) => {
     if (isConnected) {
-      setConversationHistory(prev => [...prev, {
-        type: 'user',
-        message: action,
-        timestamp: new Date()
-      }]);
+      setConversationHistory((prev) => [
+        ...prev,
+        {
+          type: "user",
+          message: action,
+          timestamp: new Date(),
+        },
+      ]);
       sendMessage(action);
     }
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleSendMessage();
     }
@@ -97,10 +105,7 @@ const ElevenLabsAsistenteVirtual = () => {
         onToggleMute={toggleMute}
       />
 
-      <StatusIndicators
-        isSpeaking={isSpeaking}
-        isListening={isListening}
-      />
+      <StatusIndicators isSpeaking={isSpeaking} isListening={isListening} />
 
       {/* Botón de micrófono */}
       <div className="flex justify-center">

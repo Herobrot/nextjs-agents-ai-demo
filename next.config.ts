@@ -2,8 +2,8 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   output: "export",
-  "distDir": "build",
-  "trailingSlash": true,
+  distDir: "build",
+  trailingSlash: true,
   pageExtensions: ["ts", "tsx"],
   poweredByHeader: false,
   images: {

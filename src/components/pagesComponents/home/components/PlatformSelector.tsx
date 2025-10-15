@@ -1,11 +1,14 @@
-import React from 'react';
+import React from "react";
 
 interface PlatformSelectorProps {
   selectedValue: string;
   onChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
 }
 
-const PlatformSelector: React.FC<PlatformSelectorProps> = ({ selectedValue, onChange }) => {
+const PlatformSelector: React.FC<PlatformSelectorProps> = ({
+  selectedValue,
+  onChange,
+}) => {
   return (
     <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 rounded-lg p-4">
       <div className="flex items-center space-x-4">

@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 interface QuickActionsProps {
   actions: string[];
@@ -10,8 +10,8 @@ interface QuickActionsProps {
 const QuickActions: React.FC<QuickActionsProps> = ({
   actions,
   onActionClick,
-  title = 'Acciones Rápidas',
-  isVisible = true
+  title = "Acciones Rápidas",
+  isVisible = true,
 }) => {
   if (!isVisible || actions.length === 0) return null;
 

@@ -67,4 +67,4 @@ Pregunta de compatibilidad: "Perfecto, entiendo que quieres saber si ese procesa
 Comparación de rendimiento: "Bueno, la diferencia entre la RTX cuatro mil sesenta y la cuatro mil sesenta ti es considerable. La ti te va a dar aproximadamente un veinte por ciento más de rendimiento... especialmente si juegas en resolución de mil cuatrocientos cuarenta pixeles. ¿Para qué juegos la planeas usar principalmente?"
 
 Orientación de presupuesto: "Entiendo que el presupuesto es importante. Esta configuración que te estoy recomendando está dentro de tu rango de precio y te va a funcionar perfectamente para lo que necesitas... Además manejamos pagos sin intereses que te pueden ayudar. ¿Te gustaría que te explique las opciones de financiamiento?"
-`
+`;

@@ -1,10 +1,10 @@
-import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { 
-  faCircle, 
-  faExclamationCircle, 
-  faSpinner 
-} from '@fortawesome/free-solid-svg-icons';
+import React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faCircle,
+  faExclamationCircle,
+  faSpinner,
+} from "@fortawesome/free-solid-svg-icons";
 
 interface ConnectionStatusProps {
   isConnected: boolean;
@@ -15,20 +15,20 @@ interface ConnectionStatusProps {
 const ConnectionStatus: React.FC<ConnectionStatusProps> = ({
   isConnected,
   isConnecting,
-  error
+  error,
 }) => {
   const getStatusColor = () => {
-    if (error) return 'text-red-500';
-    if (isConnected) return 'text-green-500';
-    if (isConnecting) return 'text-yellow-500';
-    return 'text-gray-500';
+    if (error) return "text-red-500";
+    if (isConnected) return "text-green-500";
+    if (isConnecting) return "text-yellow-500";
+    return "text-gray-500";
   };
 
   const getStatusText = () => {
-    if (error) return 'Error';
-    if (isConnected) return 'Conectado';
-    if (isConnecting) return 'Conectando...';
-    return 'Desconectado';
+    if (error) return "Error";
+    if (isConnected) return "Conectado";
+    if (isConnecting) return "Conectando...";
+    return "Desconectado";
   };
 
   const getStatusIcon = () => {
@@ -39,9 +39,9 @@ const ConnectionStatus: React.FC<ConnectionStatusProps> = ({
 
   return (
     <div className="flex items-center space-x-2">
-      <FontAwesomeIcon 
+      <FontAwesomeIcon
         icon={getStatusIcon()}
-        className={`w-3 h-3 ${getStatusColor()} ${isConnecting ? 'animate-spin' : ''}`}
+        className={`w-3 h-3 ${getStatusColor()} ${isConnecting ? "animate-spin" : ""}`}
       />
       <span className={`text-sm ${getStatusColor()}`}>{getStatusText()}</span>
     </div>

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { useVapiAgent } from '../../../../hooks/useVapi';
+import React, { useState, useEffect } from "react";
+import { useVapiAgent } from "../../../../hooks/useVapi";
 import {
   AgentHeader,
   ConnectionControls,
@@ -9,16 +9,18 @@ import {
   ErrorDisplay,
   UseCaseInfo,
   MicButton,
-  InterviewTimer
-} from '../../../../components/shared';
+  InterviewTimer,
+} from "../../../../components/shared";
 
 const VapiEntrevistador = () => {
-  const [userMessage, setUserMessage] = useState('');
-  const [conversationHistory, setConversationHistory] = useState<Array<{
-    type: 'user' | 'agent';
-    message: string;
-    timestamp: Date;
-  }>>([]);
+  const [userMessage, setUserMessage] = useState("");
+  const [conversationHistory, setConversationHistory] = useState<
+    Array<{
+      type: "user" | "agent";
+      message: string;
+      timestamp: Date;
+    }>
+  >([]);
   const [hasInterviewStarted, setHasInterviewStarted] = useState(false);
   const [isInterviewFinished, setIsInterviewFinished] = useState(false);
   const [conversationTime, setConversationTime] = useState(0);
@@ -38,16 +40,16 @@ const VapiEntrevistador = () => {
     sendMessage,
     toggleMute,
     isMuted,
-    callStatus
-  } = useVapiAgent('entrevistador');
+    callStatus,
+  } = useVapiAgent("entrevistador");
 
   // Timer para la entrevista - CORREGIDO: Usa timerActive en lugar de hasInterviewStarted
   useEffect(() => {
     let interval: NodeJS.Timeout;
-    
+
     if (timerActive && !isInterviewFinished) {
       interval = setInterval(() => {
-        setConversationTime(prev => {
+        setConversationTime((prev) => {
           const newTime = prev + 1;
           setTimeRemaining(90 - newTime);
           return newTime;
@@ -72,20 +74,23 @@ const VapiEntrevistador = () => {
   }, [isConnected, hasInterviewStarted, isInterviewFinished]);
 
   const handleSendMessage = () => {
-    if (userMessage.trim() && isConnected) {      
-      setConversationHistory(prev => [...prev, {
-        type: 'user',
-        message: userMessage,
-        timestamp: new Date()
-      }]);
-            
+    if (userMessage.trim() && isConnected) {
+      setConversationHistory((prev) => [
+        ...prev,
+        {
+          type: "user",
+          message: userMessage,
+          timestamp: new Date(),
+        },
+      ]);
+
       sendMessage(userMessage);
-      setUserMessage('');
+      setUserMessage("");
     }
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleSendMessage();
     }
@@ -107,103 +112,106 @@ const VapiEntrevistador = () => {
   };
 
   const getInterviewPhase = () => {
-    if (!isConnected) return 'Desconectado';
-    if (!hasInterviewStarted) return 'No Iniciada';
-    if (isInterviewFinished) return 'Finalizada';
-    if (conversationTime <= 30) return 'Experiencia';
-    if (conversationTime <= 60) return 'Desafíos';
-    if (conversationTime <= 90) return 'Motivación';
-    return 'Finalizada';
+    if (!isConnected) return "Desconectado";
+    if (!hasInterviewStarted) return "No Iniciada";
+    if (isInterviewFinished) return "Finalizada";
+    if (conversationTime <= 30) return "Experiencia";
+    if (conversationTime <= 60) return "Desafíos";
+    if (conversationTime <= 90) return "Motivación";
+    return "Finalizada";
   };
 
   const getPhaseDescription = () => {
     const phase = getInterviewPhase();
     switch (phase) {
-      case 'Desconectado':
-        return 'Conecta el agente para comenzar la entrevista';
-      case 'No Iniciada':
+      case "Desconectado":
+        return "Conecta el agente para comenzar la entrevista";
+      case "No Iniciada":
         return 'Presiona "Iniciar Entrevista" para comenzar';
-      case 'Experiencia':
-        return 'Cuéntanos sobre tu experiencia y logros más importantes';
-      case 'Desafíos':
-        return 'Describe cómo manejas situaciones desafiantes';
-      case 'Motivación':
-        return 'Comparte tu motivación y expectativas para el puesto';
-      case 'Finalizada':
-        return 'La entrevista ha terminado. ¡Gracias por tu tiempo!';
+      case "Experiencia":
+        return "Cuéntanos sobre tu experiencia y logros más importantes";
+      case "Desafíos":
+        return "Describe cómo manejas situaciones desafiantes";
+      case "Motivación":
+        return "Comparte tu motivación y expectativas para el puesto";
+      case "Finalizada":
+        return "La entrevista ha terminado. ¡Gracias por tu tiempo!";
       default:
-        return 'Entrevista completada';
+        return "Entrevista completada";
     }
   };
 
   const getTimerContainerStyles = () => {
-    if (!isConnected) return 'bg-red-900/30 border border-red-500/50';
-    if (!hasInterviewStarted) return 'bg-yellow-900/30 border border-yellow-500/50';
-    if (isInterviewFinished) return 'bg-gray-900/50 border border-gray-500/50';
-    return 'bg-blue-900/30 border border-blue-500/50';
+    if (!isConnected) return "bg-red-900/30 border border-red-500/50";
+    if (!hasInterviewStarted)
+      return "bg-yellow-900/30 border border-yellow-500/50";
+    if (isInterviewFinished) return "bg-gray-900/50 border border-gray-500/50";
+    return "bg-blue-900/30 border border-blue-500/50";
   };
 
   const getTimerTitleStyles = () => {
-    if (!isConnected) return 'text-red-300';
-    if (!hasInterviewStarted) return 'text-yellow-300';
-    if (isInterviewFinished) return 'text-gray-300';
-    return 'text-blue-300';
+    if (!isConnected) return "text-red-300";
+    if (!hasInterviewStarted) return "text-yellow-300";
+    if (isInterviewFinished) return "text-gray-300";
+    return "text-blue-300";
   };
 
   const getTimerTitle = () => {
-    if (!isConnected) return 'Entrevista Desconectada';
-    if (!hasInterviewStarted) return 'Entrevista Lista';
-    if (isInterviewFinished) return 'Entrevista Finalizada';
-    return 'Entrevista en Progreso';
+    if (!isConnected) return "Entrevista Desconectada";
+    if (!hasInterviewStarted) return "Entrevista Lista";
+    if (isInterviewFinished) return "Entrevista Finalizada";
+    return "Entrevista en Progreso";
   };
 
   const getStatusStyles = () => {
-    if (!isConnected) return 'text-red-400';
-    if (!hasInterviewStarted) return 'text-yellow-400';
-    if (isInterviewFinished) return 'text-gray-400';
-    return 'text-blue-400';
+    if (!isConnected) return "text-red-400";
+    if (!hasInterviewStarted) return "text-yellow-400";
+    if (isInterviewFinished) return "text-gray-400";
+    return "text-blue-400";
   };
 
   const getCircleStyles = () => {
-    if (!isConnected) return 'border-red-500 bg-red-900/20';
-    if (!hasInterviewStarted) return 'border-yellow-500 bg-yellow-900/20';
-    return 'border-gray-500 bg-gray-900/20';
+    if (!isConnected) return "border-red-500 bg-red-900/20";
+    if (!hasInterviewStarted) return "border-yellow-500 bg-yellow-900/20";
+    return "border-gray-500 bg-gray-900/20";
   };
 
   const getCircleIconStyles = () => {
-    if (!isConnected) return 'text-red-400';
-    if (!hasInterviewStarted) return 'text-yellow-400';
-    return 'text-gray-400';
+    if (!isConnected) return "text-red-400";
+    if (!hasInterviewStarted) return "text-yellow-400";
+    return "text-gray-400";
   };
 
   const getCircleIcon = () => {
-    if (!isConnected) return '!';
-    if (!hasInterviewStarted) return '▶';
-    return '✓';
+    if (!isConnected) return "!";
+    if (!hasInterviewStarted) return "▶";
+    return "✓";
   };
 
   const getCircleText = () => {
-    if (!isConnected) return 'Desconectado';
-    if (!hasInterviewStarted) return 'Listo';
-    return 'Finalizada';
+    if (!isConnected) return "Desconectado";
+    if (!hasInterviewStarted) return "Listo";
+    return "Finalizada";
   };
 
   const getCircleMessageStyles = () => {
-    if (!isConnected) return 'text-red-300';
-    if (!hasInterviewStarted) return 'text-yellow-300';
-    return 'text-gray-300';
+    if (!isConnected) return "text-red-300";
+    if (!hasInterviewStarted) return "text-yellow-300";
+    return "text-gray-300";
   };
 
   const getCircleMessage = () => {
-    if (!isConnected) return 'Conecta el agente para comenzar';
+    if (!isConnected) return "Conecta el agente para comenzar";
     if (!hasInterviewStarted) return 'Presiona "Iniciar Entrevista"';
-    return 'La entrevista ha terminado';
+    return "La entrevista ha terminado";
   };
 
   const getEmptyMessage = () => {
     if (!isConnected) return "Conecta el agente para comenzar la entrevista";
-    if (!hasInterviewStarted) return "¡Hola! Soy María de TalentConnect. Gracias por tu tiempo. Tenemos 90 segundos para conocerte mejor. ¿Estás listo para comenzar la entrevista?";
-    if (isInterviewFinished) return "La entrevista ha terminado. ¡Gracias por tu tiempo!";
+    if (!hasInterviewStarted)
+      return "¡Hola! Soy María de TalentConnect. Gracias por tu tiempo. Tenemos 90 segundos para conocerte mejor. ¿Estás listo para comenzar la entrevista?";
+    if (isInterviewFinished)
+      return "La entrevista ha terminado. ¡Gracias por tu tiempo!";
     return "¡Hola! Soy María de TalentConnect. Gracias por tu tiempo. Tenemos 90 segundos para conocerte mejor. ¿Estás listo para comenzar la entrevista?";
   };
 
@@ -241,8 +249,11 @@ const VapiEntrevistador = () => {
               {getInterviewPhase()}
             </div>
           </div>
-        </div>        
-        {timerActive && isConnected && hasInterviewStarted && !isInterviewFinished ? (
+        </div>
+        {timerActive &&
+        isConnected &&
+        hasInterviewStarted &&
+        !isInterviewFinished ? (
           <InterviewTimer
             timeRemaining={timeRemaining}
             maxTime={90}
@@ -251,7 +262,9 @@ const VapiEntrevistador = () => {
           />
         ) : (
           <div className="text-center py-8">
-            <div className={`w-24 h-24 rounded-full border-4 mx-auto flex items-center justify-center ${getCircleStyles()}`}>
+            <div
+              className={`w-24 h-24 rounded-full border-4 mx-auto flex items-center justify-center ${getCircleStyles()}`}
+            >
               <div className="text-center">
                 <div className={`text-2xl font-bold ${getCircleIconStyles()}`}>
                   {getCircleIcon()}
@@ -325,22 +338,27 @@ const VapiEntrevistador = () => {
         title="Información de la Entrevista (VAPI)"
         description="María es una entrevistadora experta de TalentConnect México con más de 8 años de experiencia. Esta entrevista express de 90 segundos evalúa tus competencias clave a través de 3 preguntas estructuradas: experiencia relevante, manejo de desafíos y motivación para el puesto. Utiliza la tecnología de VAPI con voz de Cartesia."
         additionalInfo={[
-          'Duración: 90 segundos máximo',
-          'Formato: Entrevista estructurada',
-          'Evaluación: Competencias clave',
-          'Estilo: Directo y eficiente',
-          'Tecnología: VAPI + Cartesia',
-          'Objetivo: Evaluación rápida de candidatos'
+          "Duración: 90 segundos máximo",
+          "Formato: Entrevista estructurada",
+          "Evaluación: Competencias clave",
+          "Estilo: Directo y eficiente",
+          "Tecnología: VAPI + Cartesia",
+          "Objetivo: Evaluación rápida de candidatos",
         ]}
       />
 
       {/* Instrucciones para el candidato */}
       <div className="bg-blue-900/30 border border-blue-500 rounded-lg p-4">
-        <h4 className="text-sm font-medium text-blue-300 mb-2">Instrucciones para el Candidato</h4>
+        <h4 className="text-sm font-medium text-blue-300 mb-2">
+          Instrucciones para el Candidato
+        </h4>
         <div className="text-xs text-blue-200 space-y-1">
           <p>• Mantén tus respuestas concisas y específicas</p>
           <p>• Proporciona ejemplos concretos cuando sea posible</p>
-          <p>• La entrevistadora puede interrumpirte cortésmente para mantener el tiempo</p>
+          <p>
+            • La entrevistadora puede interrumpirte cortésmente para mantener el
+            tiempo
+          </p>
           <p>• Al final tendrás oportunidad de hacer una pregunta rápida</p>
           <p>• El tiempo total es de 90 segundos máximo</p>
           <p>• Utiliza el micrófono para responder verbalmente</p>
@@ -349,13 +367,15 @@ const VapiEntrevistador = () => {
 
       {/* Información técnica de VAPI */}
       <div className="bg-green-900/30 border border-green-500 rounded-lg p-4">
-        <h4 className="text-sm font-medium text-green-300 mb-2">Información Técnica VAPI</h4>
+        <h4 className="text-sm font-medium text-green-300 mb-2">
+          Información Técnica VAPI
+        </h4>
         <div className="text-xs text-green-200 space-y-1">
           <p>• Proveedor de voz: Cartesia</p>
           <p>• ID de voz: 846d6cb0-2301-48b6-9683-48f5618ea2f6</p>
           <p>• Modelo: GPT-4o</p>
           <p>• Transcripción: Deepgram Nova-2</p>
-          <p>• Estado de llamada: {callStatus || 'No disponible'}</p>
+          <p>• Estado de llamada: {callStatus || "No disponible"}</p>
         </div>
       </div>
     </div>

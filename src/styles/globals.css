@@ -22,17 +22,17 @@ body {
   color: #f9fafb; /* text-gray-50 */
   min-height: 100vh;
 }
- 
+
 * {
   box-sizing: border-box;
 }
- 
+
 a {
   color: #3b82f6; /* text-blue-500 */
   text-decoration: none;
   transition: color 0.2s ease-in-out;
 }
- 
+
 a:hover {
   color: #60a5fa; /* text-blue-400 */
   text-decoration: underline;
@@ -42,7 +42,7 @@ a:focus {
   outline: 2px solid #3b82f6;
   outline-offset: 2px;
 }
- 
+
 img {
   max-width: 100%;
   display: block;
@@ -67,13 +67,17 @@ img {
 }
 
 /* Estilos para elementos de formulario */
-input, textarea, select {
+input,
+textarea,
+select {
   background-color: #374151; /* bg-gray-700 */
   border-color: #4b5563; /* border-gray-600 */
   color: #f9fafb; /* text-gray-50 */
 }
 
-input:focus, textarea:focus, select:focus {
+input:focus,
+textarea:focus,
+select:focus {
   outline: none;
   border-color: #3b82f6; /* border-blue-500 */
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
@@ -81,7 +85,8 @@ input:focus, textarea:focus, select:focus {
 
 /* Animaciones suaves */
 * {
-  transition: background-color 0.2s ease-in-out, 
-              border-color 0.2s ease-in-out, 
-              color 0.2s ease-in-out;
+  transition:
+    background-color 0.2s ease-in-out,
+    border-color 0.2s ease-in-out,
+    color 0.2s ease-in-out;
 }

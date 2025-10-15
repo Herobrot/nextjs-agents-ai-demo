@@ -26,10 +26,10 @@ export interface AgentTool {
 }
 
 export interface InterviewCompletionTool extends AgentTool {
-  name: 'end_interview';
-  description: 'Finaliza la entrevista y cierra la llamada';
+  name: "end_interview";
+  description: "Finaliza la entrevista y cierra la llamada";
   parameters: {
-    reason: 'completed' | 'time_up' | 'candidate_request';
+    reason: "completed" | "time_up" | "candidate_request";
     message?: string;
   };
 }
@@ -72,14 +72,23 @@ export interface UseElevenLabsReturn {
   conversationTime: number;
   isInterrupted: boolean;
   timeRemaining: number;
-  onInterviewComplete?: (reason: 'completed' | 'time_up' | 'candidate_request', message?: string) => void;
+  onInterviewComplete?: (
+    reason: "completed" | "time_up" | "candidate_request",
+    message?: string,
+  ) => void;
 }
 
 // Type guards para verificar tipos específicos
-export function isEntrevistadorConfig(config: AgentConfig): config is EntrevistadorAgentConfig {
-  return 'voiceId' in config && 'language' in config && 'conversationFlow' in config;
+export function isEntrevistadorConfig(
+  config: AgentConfig,
+): config is EntrevistadorAgentConfig {
+  return (
+    "voiceId" in config && "language" in config && "conversationFlow" in config
+  );
 }
 
-export function hasConversationFlow(config: AgentConfig): config is EntrevistadorAgentConfig {
-  return 'conversationFlow' in config;
+export function hasConversationFlow(
+  config: AgentConfig,
+): config is EntrevistadorAgentConfig {
+  return "conversationFlow" in config;
 }

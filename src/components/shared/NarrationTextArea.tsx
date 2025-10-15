@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 interface NarrationTextAreaProps {
   value: string;
@@ -15,17 +15,17 @@ const NarrationTextArea: React.FC<NarrationTextAreaProps> = ({
   value,
   onChange,
   onKeyUp,
-  placeholder = 'Escribe aquí el texto que quieres que sea narrado...',
+  placeholder = "Escribe aquí el texto que quieres que sea narrado...",
   disabled = false,
   rows = 4,
   showWordCount = true,
-  showDuration = true
+  showDuration = true,
 }) => {
   const getWordCount = (text: string) => {
     return text.trim().split(/\s+/).length;
   };
 
-  const getEstimatedDuration = (text: string) => {    
+  const getEstimatedDuration = (text: string) => {
     const words = getWordCount(text);
     const minutes = words / 150;
     return Math.max(1, Math.round(minutes * 60));
@@ -33,7 +33,10 @@ const NarrationTextArea: React.FC<NarrationTextAreaProps> = ({
 
   return (
     <div className="space-y-3">
-      <label htmlFor="narration-text" className="block text-sm font-medium text-gray-300">
+      <label
+        htmlFor="narration-text"
+        className="block text-sm font-medium text-gray-300"
+      >
         Texto para Narrar
       </label>
       <textarea
@@ -49,7 +52,11 @@ const NarrationTextArea: React.FC<NarrationTextAreaProps> = ({
       {value && (showWordCount || showDuration) && (
         <div className="flex justify-between text-xs text-gray-400">
           {showWordCount && <span>{getWordCount(value)} palabras</span>}
-          {showDuration && <span>Duración estimada: ~{getEstimatedDuration(value)} segundos</span>}
+          {showDuration && (
+            <span>
+              Duración estimada: ~{getEstimatedDuration(value)} segundos
+            </span>
+          )}
         </div>
       )}
     </div>

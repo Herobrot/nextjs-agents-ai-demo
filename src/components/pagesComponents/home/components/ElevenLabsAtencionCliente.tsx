@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useElevenLabsAgent } from '../../../../hooks/useElevenLabs';
+import React, { useState } from "react";
+import { useElevenLabsAgent } from "../../../../hooks/useElevenLabs";
 import {
   AgentHeader,
   ConnectionControls,
@@ -8,16 +8,18 @@ import {
   MessageInput,
   ErrorDisplay,
   UseCaseInfo,
-  MicButton
-} from '../../../../components/shared';
+  MicButton,
+} from "../../../../components/shared";
 
 const ElevenLabsAtencionCliente = () => {
-  const [userMessage, setUserMessage] = useState('');
-  const [conversationHistory, setConversationHistory] = useState<Array<{
-    type: 'user' | 'agent';
-    message: string;
-    timestamp: Date;
-  }>>([]);
+  const [userMessage, setUserMessage] = useState("");
+  const [conversationHistory, setConversationHistory] = useState<
+    Array<{
+      type: "user" | "agent";
+      message: string;
+      timestamp: Date;
+    }>
+  >([]);
 
   const {
     isConnected,
@@ -31,24 +33,27 @@ const ElevenLabsAtencionCliente = () => {
     stopConversation,
     sendMessage,
     toggleMute,
-    isMuted
-  } = useElevenLabsAgent('atencion-cliente');
+    isMuted,
+  } = useElevenLabsAgent("atencion-cliente");
 
   const handleSendMessage = () => {
-    if (userMessage.trim() && isConnected) {      
-      setConversationHistory(prev => [...prev, {
-        type: 'user',
-        message: userMessage,
-        timestamp: new Date()
-      }]);
-            
+    if (userMessage.trim() && isConnected) {
+      setConversationHistory((prev) => [
+        ...prev,
+        {
+          type: "user",
+          message: userMessage,
+          timestamp: new Date(),
+        },
+      ]);
+
       sendMessage(userMessage);
-      setUserMessage('');
+      setUserMessage("");
     }
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleSendMessage();
     }
@@ -78,10 +83,7 @@ const ElevenLabsAtencionCliente = () => {
         onToggleMute={toggleMute}
       />
 
-      <StatusIndicators
-        isSpeaking={isSpeaking}
-        isListening={isListening}
-      />
+      <StatusIndicators isSpeaking={isSpeaking} isListening={isListening} />
 
       {/* Botón de micrófono */}
       <div className="flex justify-center">

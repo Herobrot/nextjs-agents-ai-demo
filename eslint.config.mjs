@@ -31,7 +31,7 @@ const eslintConfig = [
     rules: {
       "prettier/prettier": "error",
     },
-  }
+  },
 ];
 
 export default eslintConfig;

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useElevenLabsAgent } from '../../../../hooks/useElevenLabs';
+import React, { useState } from "react";
+import { useElevenLabsAgent } from "../../../../hooks/useElevenLabs";
 import {
   AgentHeader,
   ConnectionControls,
@@ -9,32 +9,34 @@ import {
   NarrationHistory,
   ErrorDisplay,
   UseCaseInfo,
-  MicButton
-} from '../../../../components/shared';
+  MicButton,
+} from "../../../../components/shared";
 
 const ElevenLabsNarracionContenidos = () => {
-  const [textToNarrate, setTextToNarrate] = useState('');
-  const [narrationHistory, setNarrationHistory] = useState<Array<{
-    text: string;
-    timestamp: Date;
-    duration?: number;
-  }>>([]);
+  const [textToNarrate, setTextToNarrate] = useState("");
+  const [narrationHistory, setNarrationHistory] = useState<
+    Array<{
+      text: string;
+      timestamp: Date;
+      duration?: number;
+    }>
+  >([]);
   const [sampleTexts] = useState([
     {
-      text: 'Bienvenidos a nuestro canal. Hoy hablaremos sobre las últimas tendencias en tecnología.',
+      text: "Bienvenidos a nuestro canal. Hoy hablaremos sobre las últimas tendencias en tecnología.",
     },
     {
-      text: 'En un mundo cada vez más digital, la inteligencia artificial está transformando nuestras vidas.',
+      text: "En un mundo cada vez más digital, la inteligencia artificial está transformando nuestras vidas.",
     },
     {
-      text: 'La historia de la humanidad está marcada por momentos de innovación y cambio.',
+      text: "La historia de la humanidad está marcada por momentos de innovación y cambio.",
     },
     {
-      text: 'El futuro pertenece a aquellos que se atreven a soñar y a trabajar por sus metas.',
+      text: "El futuro pertenece a aquellos que se atreven a soñar y a trabajar por sus metas.",
     },
     {
-      text: 'La educación es la base del progreso y el desarrollo de cualquier sociedad.',
-    }
+      text: "La educación es la base del progreso y el desarrollo de cualquier sociedad.",
+    },
   ]);
 
   const {
@@ -49,33 +51,39 @@ const ElevenLabsNarracionContenidos = () => {
     stopConversation,
     sendMessage,
     toggleMute,
-    isMuted
-  } = useElevenLabsAgent('narracion-contenidos');
+    isMuted,
+  } = useElevenLabsAgent("narracion-contenidos");
 
   const handleNarrateText = () => {
-    if (textToNarrate.trim() && isConnected) {      
-      setNarrationHistory(prev => [...prev, {
-        text: textToNarrate,
-        timestamp: new Date()
-      }]);
-            
+    if (textToNarrate.trim() && isConnected) {
+      setNarrationHistory((prev) => [
+        ...prev,
+        {
+          text: textToNarrate,
+          timestamp: new Date(),
+        },
+      ]);
+
       sendMessage(textToNarrate);
-      setTextToNarrate('');
+      setTextToNarrate("");
     }
   };
 
   const handleSampleText = (sample: string) => {
     if (isConnected) {
-      setNarrationHistory(prev => [...prev, {
-        text: sample,
-        timestamp: new Date()
-      }]);
+      setNarrationHistory((prev) => [
+        ...prev,
+        {
+          text: sample,
+          timestamp: new Date(),
+        },
+      ]);
       sendMessage(sample);
     }
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleNarrateText();
     }
@@ -150,9 +158,7 @@ const ElevenLabsNarracionContenidos = () => {
         </button>
       </div>
 
-      <NarrationHistory
-        history={narrationHistory}
-      />
+      <NarrationHistory history={narrationHistory} />
 
       <UseCaseInfo
         title="Información del Caso de Uso"

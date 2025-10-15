@@ -1,19 +1,21 @@
-import React, { useState } from 'react';
-import { useVapiAgent } from '../../../../hooks/useVapi';
+import React, { useState } from "react";
+import { useVapiAgent } from "../../../../hooks/useVapi";
 
 const VapiNarracionContenidos = () => {
-  const [userMessage, setUserMessage] = useState('');
-  const [conversationHistory, setConversationHistory] = useState<Array<{
-    type: 'user' | 'agent';
-    message: string;
-    timestamp: Date;
-  }>>([]);
+  const [userMessage, setUserMessage] = useState("");
+  const [conversationHistory, setConversationHistory] = useState<
+    Array<{
+      type: "user" | "agent";
+      message: string;
+      timestamp: Date;
+    }>
+  >([]);
   const [quickActions] = useState([
-    'Narra este texto para mí',
-    'Lee este párrafo con énfasis',
-    'Cuéntame una historia',
-    'Narra un documento técnico',
-    'Lee este diálogo'
+    "Narra este texto para mí",
+    "Lee este párrafo con énfasis",
+    "Cuéntame una historia",
+    "Narra un documento técnico",
+    "Lee este diálogo",
   ]);
 
   const {
@@ -30,63 +32,75 @@ const VapiNarracionContenidos = () => {
     toggleMute,
     isMuted,
     callId,
-    callStatus
-  } = useVapiAgent('narracion-contenidos');
+    callStatus,
+  } = useVapiAgent("narracion-contenidos");
 
   const handleSendMessage = () => {
     if (userMessage.trim() && isConnected) {
       // Agregar mensaje del usuario al historial
-      setConversationHistory(prev => [...prev, {
-        type: 'user',
-        message: userMessage,
-        timestamp: new Date()
-      }]);
-      
+      setConversationHistory((prev) => [
+        ...prev,
+        {
+          type: "user",
+          message: userMessage,
+          timestamp: new Date(),
+        },
+      ]);
+
       // Enviar mensaje al agente
       sendMessage(userMessage);
-      setUserMessage('');
+      setUserMessage("");
     }
   };
 
   const handleQuickAction = (action: string) => {
     if (isConnected) {
-      setConversationHistory(prev => [...prev, {
-        type: 'user',
-        message: action,
-        timestamp: new Date()
-      }]);
+      setConversationHistory((prev) => [
+        ...prev,
+        {
+          type: "user",
+          message: action,
+          timestamp: new Date(),
+        },
+      ]);
       sendMessage(action);
     }
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleSendMessage();
     }
   };
 
   const getStatusColor = () => {
-    if (error) return 'text-red-500';
-    if (isConnected) return 'text-green-500';
-    if (isConnecting) return 'text-yellow-500';
-    return 'text-gray-500';
+    if (error) return "text-red-500";
+    if (isConnected) return "text-green-500";
+    if (isConnecting) return "text-yellow-500";
+    return "text-gray-500";
   };
 
   const getStatusText = () => {
-    if (error) return 'Error';
-    if (isConnected) return 'Conectado';
-    if (isConnecting) return 'Conectando...';
-    return 'Desconectado';
+    if (error) return "Error";
+    if (isConnected) return "Conectado";
+    if (isConnecting) return "Conectando...";
+    return "Desconectado";
   };
 
   return (
     <div className="bg-gray-800 rounded-lg p-6 space-y-6">
       <div className="flex items-center justify-between">
-        <h3 className="text-xl font-semibold text-white">Narración de Contenidos (VAPI)</h3>
+        <h3 className="text-xl font-semibold text-white">
+          Narración de Contenidos (VAPI)
+        </h3>
         <div className="flex items-center space-x-2">
-          <div className={`w-3 h-3 rounded-full ${getStatusColor().replace('text-', 'bg-')}`}></div>
-          <span className={`text-sm ${getStatusColor()}`}>{getStatusText()}</span>
+          <div
+            className={`w-3 h-3 rounded-full ${getStatusColor().replace("text-", "bg-")}`}
+          ></div>
+          <span className={`text-sm ${getStatusColor()}`}>
+            {getStatusText()}
+          </span>
         </div>
       </div>
 
@@ -95,12 +109,12 @@ const VapiNarracionContenidos = () => {
         <div className="bg-blue-900/50 border border-blue-500 rounded-lg p-4">
           <div className="flex justify-between items-center">
             <div>
-              <p className="text-blue-200 text-sm font-medium">ID de Llamada: {callId}</p>
+              <p className="text-blue-200 text-sm font-medium">
+                ID de Llamada: {callId}
+              </p>
               <p className="text-blue-300 text-xs">Estado: {callStatus}</p>
             </div>
-            <div className="text-blue-400 text-xs">
-              Plataforma: VAPI
-            </div>
+            <div className="text-blue-400 text-xs">Plataforma: VAPI</div>
           </div>
         </div>
       )}
@@ -119,7 +133,7 @@ const VapiNarracionContenidos = () => {
             disabled={isConnecting}
             className="bg-blue-600 hover:bg-blue-700 disabled:bg-blue-800 disabled:cursor-not-allowed text-white px-4 py-2 rounded-lg transition-colors duration-200"
           >
-            {isConnecting ? 'Conectando...' : 'Conectar'}
+            {isConnecting ? "Conectando..." : "Conectar"}
           </button>
         ) : (
           <>
@@ -146,12 +160,12 @@ const VapiNarracionContenidos = () => {
             <button
               onClick={toggleMute}
               className={`px-4 py-2 rounded-lg transition-colors duration-200 ${
-                isMuted 
-                  ? 'bg-gray-600 hover:bg-gray-700 text-white' 
-                  : 'bg-purple-600 hover:bg-purple-700 text-white'
+                isMuted
+                  ? "bg-gray-600 hover:bg-gray-700 text-white"
+                  : "bg-purple-600 hover:bg-purple-700 text-white"
               }`}
             >
-              {isMuted ? 'Desmutear' : 'Mutear'}
+              {isMuted ? "Desmutear" : "Mutear"}
             </button>
           </>
         )}
@@ -176,7 +190,9 @@ const VapiNarracionContenidos = () => {
       {/* Acciones rápidas */}
       {isConnected && (
         <div className="bg-gray-900/50 rounded-lg p-4">
-          <h4 className="text-sm font-medium text-gray-300 mb-3">Tipos de Narración</h4>
+          <h4 className="text-sm font-medium text-gray-300 mb-3">
+            Tipos de Narración
+          </h4>
           <div className="flex flex-wrap gap-2">
             {quickActions.map((action, index) => (
               <button
@@ -196,19 +212,20 @@ const VapiNarracionContenidos = () => {
         <div className="space-y-3">
           {conversationHistory.length === 0 ? (
             <p className="text-gray-400 text-center py-8">
-              ¡Bienvenido! Soy tu narrador profesional con VAPI. ¿Qué contenido te gustaría que narre?
+              ¡Bienvenido! Soy tu narrador profesional con VAPI. ¿Qué contenido
+              te gustaría que narre?
             </p>
           ) : (
             conversationHistory.map((entry, index) => (
               <div
                 key={`${entry.timestamp.getTime()}-${index}`}
-                className={`flex ${entry.type === 'user' ? 'justify-end' : 'justify-start'}`}
+                className={`flex ${entry.type === "user" ? "justify-end" : "justify-start"}`}
               >
                 <div
                   className={`max-w-xs px-4 py-2 rounded-lg ${
-                    entry.type === 'user'
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-gray-700 text-gray-200'
+                    entry.type === "user"
+                      ? "bg-blue-600 text-white"
+                      : "bg-gray-700 text-gray-200"
                   }`}
                 >
                   <p className="text-sm">{entry.message}</p>
@@ -244,10 +261,13 @@ const VapiNarracionContenidos = () => {
 
       {/* Información adicional */}
       <div className="bg-gray-900/50 rounded-lg p-4">
-        <h4 className="text-sm font-medium text-gray-300 mb-2">Información del Caso de Uso</h4>
+        <h4 className="text-sm font-medium text-gray-300 mb-2">
+          Información del Caso de Uso
+        </h4>
         <p className="text-xs text-gray-400">
-          Este narrador profesional está diseñado para crear experiencias de audio envolventes 
-          y de alta calidad usando VAPI. Puede narrar audiolibros, documentales, podcasts y más.
+          Este narrador profesional está diseñado para crear experiencias de
+          audio envolventes y de alta calidad usando VAPI. Puede narrar
+          audiolibros, documentales, podcasts y más.
         </p>
         <div className="mt-2 text-xs text-gray-500">
           <p>• Plataforma: VAPI</p>

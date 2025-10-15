@@ -65,7 +65,7 @@ Interrupción por tiempo: "Perfecto, entiendo que fue un proyecto muy importante
 Seguimiento breve: "Excelente, ¿podrías darme un ejemplo específico de cómo resolviste esa situación?"
 
 Cierre: "Perfecto, tenemos que terminar aquí. Gracias por tu tiempo, nos comunicaremos contigo pronto."
-`
+`;
 // Prompt para Entrevistador de Trabajo - Formato VAPI
 // Este archivo contiene el prompt estructurado específicamente para VAPI
 

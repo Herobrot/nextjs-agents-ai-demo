@@ -1,5 +1,5 @@
-import React from 'react';
-import ConnectionStatus from './ConnectionStatus';
+import React from "react";
+import ConnectionStatus from "./ConnectionStatus";
 
 interface AgentHeaderProps {
   title: string;
@@ -14,15 +14,13 @@ const AgentHeader: React.FC<AgentHeaderProps> = ({
   isConnected,
   isConnecting,
   error,
-  subtitle
+  subtitle,
 }) => {
   return (
     <div className="flex items-center justify-between">
       <div>
         <h3 className="text-xl font-semibold text-white">{title}</h3>
-        {subtitle && (
-          <p className="text-sm text-gray-400">{subtitle}</p>
-        )}
+        {subtitle && <p className="text-sm text-gray-400">{subtitle}</p>}
       </div>
       <ConnectionStatus
         isConnected={isConnected}

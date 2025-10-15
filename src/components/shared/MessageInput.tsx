@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 interface MessageInputProps {
   value: string;
@@ -15,12 +15,12 @@ const MessageInput: React.FC<MessageInputProps> = ({
   onChange,
   onSend,
   onKeyPress,
-  placeholder = 'Escribe tu mensaje aquí...',
+  placeholder = "Escribe tu mensaje aquí...",
   disabled = false,
-  buttonText = 'Enviar'
+  buttonText = "Enviar",
 }) => {
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       onSend();
     }

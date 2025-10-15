@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 interface NarrationEntry {
   text: string;
@@ -16,16 +16,16 @@ interface NarrationHistoryProps {
 
 const NarrationHistory: React.FC<NarrationHistoryProps> = ({
   history,
-  title = 'Historial de Narraciones',
-  maxHeight = 'max-h-48',
+  title = "Historial de Narraciones",
+  maxHeight = "max-h-48",
   showWordCount = true,
-  showDuration = true
+  showDuration = true,
 }) => {
   const getWordCount = (text: string) => {
     return text.trim().split(/\s+/).length;
   };
 
-  const getEstimatedDuration = (text: string) => {    
+  const getEstimatedDuration = (text: string) => {
     const words = getWordCount(text);
     const minutes = words / 150;
     return Math.max(1, Math.round(minutes * 60));
@@ -41,25 +41,25 @@ const NarrationHistory: React.FC<NarrationHistoryProps> = ({
           </p>
         ) : (
           history.map((entry, index) => (
-            <div key={`narration-${entry.timestamp.getTime()}-${index}`} className="bg-gray-800 rounded-lg p-3">
+            <div
+              key={`narration-${entry.timestamp.getTime()}-${index}`}
+              className="bg-gray-800 rounded-lg p-3"
+            >
               <p className="text-sm text-gray-200 mb-2">{entry.text}</p>
               <div className="flex justify-between text-xs text-gray-400">
                 <span>{entry.timestamp.toLocaleTimeString()}</span>
                 <span>
                   {showWordCount && showDuration && (
                     <>
-                      {getWordCount(entry.text)} palabras (~{entry.duration || getEstimatedDuration(entry.text)}s)
+                      {getWordCount(entry.text)} palabras (~
+                      {entry.duration || getEstimatedDuration(entry.text)}s)
                     </>
                   )}
                   {showWordCount && !showDuration && (
-                    <>
-                      {getWordCount(entry.text)} palabras
-                    </>
+                    <>{getWordCount(entry.text)} palabras</>
                   )}
                   {!showWordCount && showDuration && (
-                    <>
-                      ~{entry.duration || getEstimatedDuration(entry.text)}s
-                    </>
+                    <>~{entry.duration || getEstimatedDuration(entry.text)}s</>
                   )}
                 </span>
               </div>

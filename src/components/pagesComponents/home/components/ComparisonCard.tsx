@@ -1,5 +1,5 @@
-import React from 'react';
-import { ComparisonCardProps, Metric } from '../../../../utils/metrics';
+import React from "react";
+import { ComparisonCardProps, Metric } from "../../../../utils/metrics";
 
 const ComparisonCard = ({ title, data }: ComparisonCardProps) => {
   return (
@@ -18,7 +18,8 @@ const ComparisonCard = ({ title, data }: ComparisonCardProps) => {
               {metric.name}
             </span>
             <span className="text-lg font-bold text-purple-400 group-hover:text-purple-300 transition-colors duration-200">
-              {metric.value} <span className="text-sm text-gray-500">{metric.unit}</span>
+              {metric.value}{" "}
+              <span className="text-sm text-gray-500">{metric.unit}</span>
             </span>
           </li>
         ))}

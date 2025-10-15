@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { 
-  faMicrophone, 
-  faMicrophoneSlash, 
+import React, { useState, useEffect } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faMicrophone,
+  faMicrophoneSlash,
   faSpinner,
-  faExclamationCircle
-} from '@fortawesome/free-solid-svg-icons';
+  faExclamationCircle,
+} from "@fortawesome/free-solid-svg-icons";
 
 interface MicButtonProps {
   isConnected: boolean;
@@ -15,7 +15,7 @@ interface MicButtonProps {
   onToggleMute: () => void;
   onRequestPermission?: () => Promise<boolean>;
   className?: string;
-  size?: 'sm' | 'md' | 'lg';
+  size?: "sm" | "md" | "lg";
 }
 
 const MicButton: React.FC<MicButtonProps> = ({
@@ -25,8 +25,8 @@ const MicButton: React.FC<MicButtonProps> = ({
   isMuted,
   onToggleMute,
   onRequestPermission,
-  className = '',
-  size = 'md'
+  className = "",
+  size = "md",
 }) => {
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
   const [isRequestingPermission, setIsRequestingPermission] = useState(false);
@@ -38,11 +38,13 @@ const MicButton: React.FC<MicButtonProps> = ({
 
   const checkMicrophonePermission = async () => {
     try {
-      const permission = await navigator.permissions.query({ name: 'microphone' as PermissionName });
-      setHasPermission(permission.state === 'granted');
+      const permission = await navigator.permissions.query({
+        name: "microphone" as PermissionName,
+      });
+      setHasPermission(permission.state === "granted");
     } catch (error) {
       // Fallback para navegadores que no soportan permissions API
-      console.warn('Permissions API no soportada:', error);
+      console.warn("Permissions API no soportada:", error);
       setHasPermission(null);
     }
   };
@@ -52,20 +54,20 @@ const MicButton: React.FC<MicButtonProps> = ({
     try {
       // Intentar acceder al micrófono
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      
+
       // Detener el stream inmediatamente ya que solo necesitamos el permiso
-      stream.getTracks().forEach(track => track.stop());
-      
+      stream.getTracks().forEach((track) => track.stop());
+
       setHasPermission(true);
-      
+
       // Llamar callback personalizado si existe
       if (onRequestPermission) {
         await onRequestPermission();
       }
-      
+
       return true;
     } catch (error) {
-      console.error('Error al solicitar permiso del micrófono:', error);
+      console.error("Error al solicitar permiso del micrófono:", error);
       setHasPermission(false);
       return false;
     } finally {
@@ -87,29 +89,29 @@ const MicButton: React.FC<MicButtonProps> = ({
 
   const getSizeClasses = () => {
     switch (size) {
-      case 'sm':
-        return 'w-10 h-10';
-      case 'lg':
-        return 'w-16 h-16';
+      case "sm":
+        return "w-10 h-10";
+      case "lg":
+        return "w-16 h-16";
       default:
-        return 'w-12 h-12';
+        return "w-12 h-12";
     }
   };
 
   const getIconSize = () => {
     switch (size) {
-      case 'sm':
-        return 'w-4 h-4';
-      case 'lg':
-        return 'w-8 h-8';
+      case "sm":
+        return "w-4 h-4";
+      case "lg":
+        return "w-8 h-8";
       default:
-        return 'w-6 h-6';
+        return "w-6 h-6";
     }
   };
 
   const getButtonClasses = () => {
     const baseClasses = `${getSizeClasses()} rounded-full flex items-center justify-center transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800`;
-    
+
     if (!isConnected) {
       return `${baseClasses} bg-gray-600 cursor-not-allowed text-gray-400`;
     }
@@ -142,47 +144,37 @@ const MicButton: React.FC<MicButtonProps> = ({
   const getIcon = () => {
     if (isRequestingPermission) {
       return (
-        <FontAwesomeIcon 
-          icon={faSpinner} 
-          className={`${getIconSize()} animate-spin`} 
+        <FontAwesomeIcon
+          icon={faSpinner}
+          className={`${getIconSize()} animate-spin`}
         />
       );
     }
 
     if (hasPermission === false) {
       return (
-        <FontAwesomeIcon 
-          icon={faExclamationCircle} 
-          className={getIconSize()} 
-        />
+        <FontAwesomeIcon icon={faExclamationCircle} className={getIconSize()} />
       );
     }
 
     if (isMuted) {
       return (
-        <FontAwesomeIcon 
-          icon={faMicrophoneSlash} 
-          className={getIconSize()} 
-        />
+        <FontAwesomeIcon icon={faMicrophoneSlash} className={getIconSize()} />
       );
     }
 
-    return (
-      <FontAwesomeIcon 
-        icon={faMicrophone} 
-        className={getIconSize()} 
-      />
-    );
+    return <FontAwesomeIcon icon={faMicrophone} className={getIconSize()} />;
   };
 
   const getTooltipText = () => {
-    if (!isConnected) return 'Conecta primero';
-    if (hasPermission === false) return 'Permiso denegado - Haz clic para solicitar';
-    if (isRequestingPermission) return 'Solicitando permiso...';
-    if (isMuted) return 'Micrófono silenciado - Haz clic para activar';
-    if (isListening) return 'Es tu turno - Habla ahora';
-    if (isSpeaking) return 'Puedes interrumpir - Haz clic para hablar';
-    return 'Haz clic para hablar';
+    if (!isConnected) return "Conecta primero";
+    if (hasPermission === false)
+      return "Permiso denegado - Haz clic para solicitar";
+    if (isRequestingPermission) return "Solicitando permiso...";
+    if (isMuted) return "Micrófono silenciado - Haz clic para activar";
+    if (isListening) return "Es tu turno - Habla ahora";
+    if (isSpeaking) return "Puedes interrumpir - Haz clic para hablar";
+    return "Haz clic para hablar";
   };
 
   return (
@@ -195,7 +187,7 @@ const MicButton: React.FC<MicButtonProps> = ({
       >
         {getIcon()}
       </button>
-      
+
       {/* Indicador de estado */}
       {(isListening || isSpeaking) && !isMuted && (
         <div className="absolute -inset-1 rounded-full border-2 border-green-400 animate-ping opacity-75"></div>

@@ -1,6 +1,6 @@
-import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faVolumeUp, faEarListen } from '@fortawesome/free-solid-svg-icons';
+import React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faVolumeUp, faEarListen } from "@fortawesome/free-solid-svg-icons";
 
 interface StatusIndicatorsProps {
   isSpeaking: boolean;
@@ -12,8 +12,8 @@ interface StatusIndicatorsProps {
 const StatusIndicators: React.FC<StatusIndicatorsProps> = ({
   isSpeaking,
   isListening,
-  speakingText = 'Hablando',
-  listeningText = 'Escuchando'
+  speakingText = "Hablando",
+  listeningText = "Escuchando",
 }) => {
   return (
     <div className="flex space-x-4">

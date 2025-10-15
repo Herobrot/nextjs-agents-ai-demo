@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 interface ConnectionControlsProps {
   isConnected: boolean;
@@ -26,8 +26,8 @@ const ConnectionControls: React.FC<ConnectionControlsProps> = ({
   onStartConversation,
   onStopConversation,
   onToggleMute,
-  startButtonText = 'Iniciar Conversación',
-  stopButtonText = 'Detener Conversación'
+  startButtonText = "Iniciar Conversación",
+  stopButtonText = "Detener Conversación",
 }) => {
   return (
     <div className="flex flex-wrap gap-3">
@@ -37,7 +37,7 @@ const ConnectionControls: React.FC<ConnectionControlsProps> = ({
           disabled={isConnecting}
           className="bg-blue-600 hover:bg-blue-700 disabled:bg-blue-800 disabled:cursor-not-allowed text-white px-4 py-2 rounded-lg transition-colors duration-200"
         >
-          {isConnecting ? 'Conectando...' : 'Conectar'}
+          {isConnecting ? "Conectando..." : "Conectar"}
         </button>
       ) : (
         <>
@@ -64,12 +64,12 @@ const ConnectionControls: React.FC<ConnectionControlsProps> = ({
           <button
             onClick={onToggleMute}
             className={`px-4 py-2 rounded-lg transition-colors duration-200 ${
-              isMuted 
-                ? 'bg-gray-600 hover:bg-gray-700 text-white' 
-                : 'bg-purple-600 hover:bg-purple-700 text-white'
+              isMuted
+                ? "bg-gray-600 hover:bg-gray-700 text-white"
+                : "bg-purple-600 hover:bg-purple-700 text-white"
             }`}
           >
-            {isMuted ? 'Desmutear' : 'Mutear'}
+            {isMuted ? "Desmutear" : "Mutear"}
           </button>
         </>
       )}

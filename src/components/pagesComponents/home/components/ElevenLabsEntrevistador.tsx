@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { useElevenLabsAgent } from '../../../../hooks/useElevenLabs';
+import React, { useState, useEffect } from "react";
+import { useElevenLabsAgent } from "../../../../hooks/useElevenLabs";
 import {
   AgentHeader,
   ConnectionControls,
@@ -9,22 +9,30 @@ import {
   ErrorDisplay,
   UseCaseInfo,
   MicButton,
-  InterviewTimer
-} from '../../../../components/shared';
+  InterviewTimer,
+} from "../../../../components/shared";
 
 const ElevenLabsEntrevistador = () => {
-  const [userMessage, setUserMessage] = useState('');
-  const [conversationHistory, setConversationHistory] = useState<Array<{
-    type: 'user' | 'agent';
-    message: string;
-    timestamp: Date;
-  }>>([]);
+  const [userMessage, setUserMessage] = useState("");
+  const [conversationHistory, setConversationHistory] = useState<
+    Array<{
+      type: "user" | "agent";
+      message: string;
+      timestamp: Date;
+    }>
+  >([]);
   const [hasInterviewStarted, setHasInterviewStarted] = useState(false);
   const [isInterviewFinished, setIsInterviewFinished] = useState(false);
 
-  const handleInterviewComplete = (reason: 'completed' | 'time_up' | 'candidate_request', message?: string) => {
+  const handleInterviewComplete = (
+    reason: "completed" | "time_up" | "candidate_request",
+    message?: string,
+  ) => {
     setIsInterviewFinished(true);
-    console.log(`Entrevista finalizada: ${reason}`, message ? `- ${message}` : '');
+    console.log(
+      `Entrevista finalizada: ${reason}`,
+      message ? `- ${message}` : "",
+    );
   };
 
   const {
@@ -41,16 +49,26 @@ const ElevenLabsEntrevistador = () => {
     toggleMute,
     isMuted,
     conversationTime,
-    timeRemaining
-  } = useElevenLabsAgent('entrevistador', handleInterviewComplete);
+    timeRemaining,
+  } = useElevenLabsAgent("entrevistador", handleInterviewComplete);
 
   // SOLUCIÓN: Detectar automáticamente cuando la conversación ha iniciado
   useEffect(() => {
     // Si hay actividad de conversación (speaking o listening), marcar como iniciada
-    if (isConnected && (isSpeaking || isListening || conversationTime > 0) && !hasInterviewStarted) {
+    if (
+      isConnected &&
+      (isSpeaking || isListening || conversationTime > 0) &&
+      !hasInterviewStarted
+    ) {
       setHasInterviewStarted(true);
     }
-  }, [isConnected, isSpeaking, isListening, conversationTime, hasInterviewStarted]);
+  }, [
+    isConnected,
+    isSpeaking,
+    isListening,
+    conversationTime,
+    hasInterviewStarted,
+  ]);
 
   // Resetear estados cuando se desconecta
   useEffect(() => {
@@ -61,20 +79,23 @@ const ElevenLabsEntrevistador = () => {
   }, [isConnected]);
 
   const handleSendMessage = () => {
-    if (userMessage.trim() && isConnected) {      
-      setConversationHistory(prev => [...prev, {
-        type: 'user',
-        message: userMessage,
-        timestamp: new Date()
-      }]);
-            
+    if (userMessage.trim() && isConnected) {
+      setConversationHistory((prev) => [
+        ...prev,
+        {
+          type: "user",
+          message: userMessage,
+          timestamp: new Date(),
+        },
+      ]);
+
       sendMessage(userMessage);
-      setUserMessage('');
+      setUserMessage("");
     }
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleSendMessage();
     }
@@ -83,7 +104,7 @@ const ElevenLabsEntrevistador = () => {
   const handleTimeUp = () => {
     // Cuando se acaba el tiempo, enviar mensaje de finalización
     if (isConnected) {
-      sendMessage('Gracias por tu tiempo, la entrevista ha terminado.');
+      sendMessage("Gracias por tu tiempo, la entrevista ha terminado.");
       setIsInterviewFinished(true);
     }
   };
@@ -100,103 +121,105 @@ const ElevenLabsEntrevistador = () => {
   };
 
   const getInterviewPhase = () => {
-    if (!isConnected) return 'Desconectado';
-    if (!hasInterviewStarted) return 'Conectado';
-    if (isInterviewFinished) return 'Finalizada';
-    if (conversationTime <= 30) return 'Experiencia';
-    if (conversationTime <= 60) return 'Desafíos';
-    if (conversationTime <= 90) return 'Motivación';
-    return 'Completada';
+    if (!isConnected) return "Desconectado";
+    if (!hasInterviewStarted) return "Conectado";
+    if (isInterviewFinished) return "Finalizada";
+    if (conversationTime <= 30) return "Experiencia";
+    if (conversationTime <= 60) return "Desafíos";
+    if (conversationTime <= 90) return "Motivación";
+    return "Completada";
   };
 
   const getPhaseDescription = () => {
     const phase = getInterviewPhase();
     switch (phase) {
-      case 'Desconectado':
-        return 'Conecta el agente para comenzar la entrevista';
-      case 'Conectado':
-        return 'Esperando que el agente inicie la conversación...';
-      case 'Experiencia':
-        return 'Cuéntanos sobre tu experiencia y logros más importantes';
-      case 'Desafíos':
-        return 'Describe cómo manejas situaciones desafiantes';
-      case 'Motivación':
-        return 'Comparte tu motivación y expectativas para el puesto';
-      case 'Finalizada':
-        return 'La entrevista ha terminado. ¡Gracias por tu tiempo!';
+      case "Desconectado":
+        return "Conecta el agente para comenzar la entrevista";
+      case "Conectado":
+        return "Esperando que el agente inicie la conversación...";
+      case "Experiencia":
+        return "Cuéntanos sobre tu experiencia y logros más importantes";
+      case "Desafíos":
+        return "Describe cómo manejas situaciones desafiantes";
+      case "Motivación":
+        return "Comparte tu motivación y expectativas para el puesto";
+      case "Finalizada":
+        return "La entrevista ha terminado. ¡Gracias por tu tiempo!";
       default:
-        return 'Entrevista completada';
+        return "Entrevista completada";
     }
   };
 
   const getTimerContainerStyles = () => {
-    if (!isConnected) return 'bg-red-900/30 border border-red-500/50';
-    if (!hasInterviewStarted) return 'bg-blue-900/30 border border-blue-500/50';
-    if (isInterviewFinished) return 'bg-gray-900/50 border border-gray-500/50';
-    return 'bg-gray-900/50';
+    if (!isConnected) return "bg-red-900/30 border border-red-500/50";
+    if (!hasInterviewStarted) return "bg-blue-900/30 border border-blue-500/50";
+    if (isInterviewFinished) return "bg-gray-900/50 border border-gray-500/50";
+    return "bg-gray-900/50";
   };
 
   const getTimerTitleStyles = () => {
-    if (!isConnected) return 'text-red-300';
-    if (!hasInterviewStarted) return 'text-blue-300';
-    if (isInterviewFinished) return 'text-gray-300';
-    return 'text-white';
+    if (!isConnected) return "text-red-300";
+    if (!hasInterviewStarted) return "text-blue-300";
+    if (isInterviewFinished) return "text-gray-300";
+    return "text-white";
   };
 
   const getTimerTitle = () => {
-    if (!isConnected) return 'Entrevista Desconectada';
-    if (!hasInterviewStarted) return 'Entrevista Conectada';
-    if (isInterviewFinished) return 'Entrevista Finalizada';
-    return 'Entrevista en Progreso';
+    if (!isConnected) return "Entrevista Desconectada";
+    if (!hasInterviewStarted) return "Entrevista Conectada";
+    if (isInterviewFinished) return "Entrevista Finalizada";
+    return "Entrevista en Progreso";
   };
 
   const getStatusStyles = () => {
-    if (!isConnected) return 'text-red-400';
-    if (!hasInterviewStarted) return 'text-blue-400';
-    if (isInterviewFinished) return 'text-gray-400';
-    return 'text-green-400';
+    if (!isConnected) return "text-red-400";
+    if (!hasInterviewStarted) return "text-blue-400";
+    if (isInterviewFinished) return "text-gray-400";
+    return "text-green-400";
   };
 
   const getCircleStyles = () => {
-    if (!isConnected) return 'border-red-500 bg-red-900/20';
-    if (!hasInterviewStarted) return 'border-blue-500 bg-blue-900/20';
-    return 'border-gray-500 bg-gray-900/20';
+    if (!isConnected) return "border-red-500 bg-red-900/20";
+    if (!hasInterviewStarted) return "border-blue-500 bg-blue-900/20";
+    return "border-gray-500 bg-gray-900/20";
   };
 
   const getCircleIconStyles = () => {
-    if (!isConnected) return 'text-red-400';
-    if (!hasInterviewStarted) return 'text-blue-400';
-    return 'text-gray-400';
+    if (!isConnected) return "text-red-400";
+    if (!hasInterviewStarted) return "text-blue-400";
+    return "text-gray-400";
   };
 
   const getCircleIcon = () => {
-    if (!isConnected) return '✕';
-    if (!hasInterviewStarted) return '⏳';
-    return '✓';
+    if (!isConnected) return "✕";
+    if (!hasInterviewStarted) return "⏳";
+    return "✓";
   };
 
   const getCircleText = () => {
-    if (!isConnected) return 'Desconectado';
-    if (!hasInterviewStarted) return 'Esperando';
-    return 'Finalizada';
+    if (!isConnected) return "Desconectado";
+    if (!hasInterviewStarted) return "Esperando";
+    return "Finalizada";
   };
 
   const getCircleMessageStyles = () => {
-    if (!isConnected) return 'text-red-300';
-    if (!hasInterviewStarted) return 'text-blue-300';
-    return 'text-gray-300';
+    if (!isConnected) return "text-red-300";
+    if (!hasInterviewStarted) return "text-blue-300";
+    return "text-gray-300";
   };
 
   const getCircleMessage = () => {
-    if (!isConnected) return 'Conecta el agente para comenzar';
-    if (!hasInterviewStarted) return 'El agente está iniciando la conversación...';
-    return 'La entrevista ha terminado';
+    if (!isConnected) return "Conecta el agente para comenzar";
+    if (!hasInterviewStarted)
+      return "El agente está iniciando la conversación...";
+    return "La entrevista ha terminado";
   };
 
   const getEmptyMessage = () => {
     if (!isConnected) return "Conecta el agente para comenzar la entrevista";
     if (!hasInterviewStarted) return "Conectando con María de TalentConnect...";
-    if (isInterviewFinished) return "La entrevista ha terminado. ¡Gracias por tu tiempo!";
+    if (isInterviewFinished)
+      return "La entrevista ha terminado. ¡Gracias por tu tiempo!";
     return "¡Hola! Soy María de TalentConnect. Gracias por tu tiempo. Tenemos 90 segundos para conocerte mejor. ¿Estás listo para comenzar la entrevista?";
   };
 
@@ -235,7 +258,7 @@ const ElevenLabsEntrevistador = () => {
             </div>
           </div>
         </div>
-        
+
         {/* CAMBIO CLAVE: Mostrar timer cuando hay actividad de conversación */}
         {isConnected && hasInterviewStarted && !isInterviewFinished ? (
           <InterviewTimer
@@ -247,7 +270,9 @@ const ElevenLabsEntrevistador = () => {
           />
         ) : (
           <div className="text-center py-8">
-            <div className={`w-24 h-24 rounded-full border-4 mx-auto flex items-center justify-center ${getCircleStyles()}`}>
+            <div
+              className={`w-24 h-24 rounded-full border-4 mx-auto flex items-center justify-center ${getCircleStyles()}`}
+            >
               <div className="text-center">
                 <div className={`text-2xl font-bold ${getCircleIconStyles()}`}>
                   {getCircleIcon()}
@@ -321,21 +346,26 @@ const ElevenLabsEntrevistador = () => {
         title="Información de la Entrevista"
         description="María es una entrevistadora experta de TalentConnect México con más de 8 años de experiencia. Esta entrevista express de 90 segundos evalúa tus competencias clave a través de 3 preguntas estructuradas: experiencia relevante, manejo de desafíos y motivación para el puesto."
         additionalInfo={[
-          'Duración: 90 segundos máximo',
-          'Formato: Entrevista estructurada',
-          'Evaluación: Competencias clave',
-          'Estilo: Directo y eficiente',
-          'Objetivo: Evaluación rápida de candidatos'
+          "Duración: 90 segundos máximo",
+          "Formato: Entrevista estructurada",
+          "Evaluación: Competencias clave",
+          "Estilo: Directo y eficiente",
+          "Objetivo: Evaluación rápida de candidatos",
         ]}
       />
 
       {/* Instrucciones para el candidato */}
       <div className="bg-blue-900/30 border border-blue-500 rounded-lg p-4">
-        <h4 className="text-sm font-medium text-blue-300 mb-2">Instrucciones para el Candidato</h4>
+        <h4 className="text-sm font-medium text-blue-300 mb-2">
+          Instrucciones para el Candidato
+        </h4>
         <div className="text-xs text-blue-200 space-y-1">
           <p>• Mantén tus respuestas concisas y específicas</p>
           <p>• Proporciona ejemplos concretos cuando sea posible</p>
-          <p>• La entrevistadora puede interrumpirte cortésmente para mantener el tiempo</p>
+          <p>
+            • La entrevistadora puede interrumpirte cortésmente para mantener el
+            tiempo
+          </p>
           <p>• Al final tendrás oportunidad de hacer una pregunta rápida</p>
           <p>• El tiempo total es de 90 segundos máximo</p>
         </div>

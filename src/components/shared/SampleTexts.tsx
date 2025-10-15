@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 interface SampleText {
   text: string;
@@ -18,10 +18,10 @@ interface SampleTextsProps {
 const SampleTexts: React.FC<SampleTextsProps> = ({
   samples,
   onSampleClick,
-  title = 'Textos de Ejemplo',
+  title = "Textos de Ejemplo",
   isVisible = true,
   showWordCount = true,
-  showDuration = true
+  showDuration = true,
 }) => {
   if (!isVisible || samples.length === 0) return null;
 
@@ -29,7 +29,7 @@ const SampleTexts: React.FC<SampleTextsProps> = ({
     return text.trim().split(/\s+/).length;
   };
 
-  const getEstimatedDuration = (text: string) => {    
+  const getEstimatedDuration = (text: string) => {
     const words = getWordCount(text);
     const minutes = words / 150;
     return Math.max(1, Math.round(minutes * 60));
@@ -50,17 +50,21 @@ const SampleTexts: React.FC<SampleTextsProps> = ({
               <span className="text-gray-400 ml-2 text-xs">
                 {showWordCount && showDuration && (
                   <>
-                    {sample.wordCount || getWordCount(sample.text)} palabras (~{sample.estimatedDuration || getEstimatedDuration(sample.text)}s)
+                    {sample.wordCount || getWordCount(sample.text)} palabras (~
+                    {sample.estimatedDuration ||
+                      getEstimatedDuration(sample.text)}
+                    s)
                   </>
                 )}
                 {showWordCount && !showDuration && (
-                  <>
-                    {sample.wordCount || getWordCount(sample.text)} palabras
-                  </>
+                  <>{sample.wordCount || getWordCount(sample.text)} palabras</>
                 )}
                 {!showWordCount && showDuration && (
                   <>
-                    ~{sample.estimatedDuration || getEstimatedDuration(sample.text)}s
+                    ~
+                    {sample.estimatedDuration ||
+                      getEstimatedDuration(sample.text)}
+                    s
                   </>
                 )}
               </span>

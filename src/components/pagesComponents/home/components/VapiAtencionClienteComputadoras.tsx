@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useVapiAgent } from '../../../../hooks/useVapi';
+import React, { useState } from "react";
+import { useVapiAgent } from "../../../../hooks/useVapi";
 import {
   AgentHeader,
   ConnectionControls,
@@ -9,22 +9,24 @@ import {
   MessageInput,
   ErrorDisplay,
   UseCaseInfo,
-  MicButton
-} from '../../../../components/shared';
+  MicButton,
+} from "../../../../components/shared";
 
 const VapiAtencionClienteComputadoras = () => {
-  const [userMessage, setUserMessage] = useState('');
-  const [conversationHistory, setConversationHistory] = useState<Array<{
-    type: 'user' | 'agent';
-    message: string;
-    timestamp: Date;
-  }>>([]);
+  const [userMessage, setUserMessage] = useState("");
+  const [conversationHistory, setConversationHistory] = useState<
+    Array<{
+      type: "user" | "agent";
+      message: string;
+      timestamp: Date;
+    }>
+  >([]);
   const [quickActions] = useState([
-    '¿Qué procesador me recomiendas?',
-    'Necesito ayuda con compatibilidad',
-    '¿Cuál es la mejor GPU para gaming?',
-    'Ayúdame a armar una PC',
-    '¿Qué fuente de poder necesito?'
+    "¿Qué procesador me recomiendas?",
+    "Necesito ayuda con compatibilidad",
+    "¿Cuál es la mejor GPU para gaming?",
+    "Ayúdame a armar una PC",
+    "¿Qué fuente de poder necesito?",
   ]);
 
   const {
@@ -41,35 +43,41 @@ const VapiAtencionClienteComputadoras = () => {
     toggleMute,
     isMuted,
     callId,
-    callStatus
-  } = useVapiAgent('atencion-cliente-computadoras');
+    callStatus,
+  } = useVapiAgent("atencion-cliente-computadoras");
 
   const handleSendMessage = () => {
-    if (userMessage.trim() && isConnected) {      
-      setConversationHistory(prev => [...prev, {
-        type: 'user',
-        message: userMessage,
-        timestamp: new Date()
-      }]);
-            
+    if (userMessage.trim() && isConnected) {
+      setConversationHistory((prev) => [
+        ...prev,
+        {
+          type: "user",
+          message: userMessage,
+          timestamp: new Date(),
+        },
+      ]);
+
       sendMessage(userMessage);
-      setUserMessage('');
+      setUserMessage("");
     }
   };
 
   const handleQuickAction = (action: string) => {
     if (isConnected) {
-      setConversationHistory(prev => [...prev, {
-        type: 'user',
-        message: action,
-        timestamp: new Date()
-      }]);
+      setConversationHistory((prev) => [
+        ...prev,
+        {
+          type: "user",
+          message: action,
+          timestamp: new Date(),
+        },
+      ]);
       sendMessage(action);
     }
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleSendMessage();
     }
@@ -89,12 +97,12 @@ const VapiAtencionClienteComputadoras = () => {
         <div className="bg-blue-900/50 border border-blue-500 rounded-lg p-4">
           <div className="flex justify-between items-center">
             <div>
-              <p className="text-blue-200 text-sm font-medium">ID de Llamada: {callId}</p>
+              <p className="text-blue-200 text-sm font-medium">
+                ID de Llamada: {callId}
+              </p>
               <p className="text-blue-300 text-xs">Estado: {callStatus}</p>
             </div>
-            <div className="text-blue-400 text-xs">
-              Plataforma: VAPI
-            </div>
+            <div className="text-blue-400 text-xs">Plataforma: VAPI</div>
           </div>
         </div>
       )}
@@ -114,10 +122,7 @@ const VapiAtencionClienteComputadoras = () => {
         onToggleMute={toggleMute}
       />
 
-      <StatusIndicators
-        isSpeaking={isSpeaking}
-        isListening={isListening}
-      />
+      <StatusIndicators isSpeaking={isSpeaking} isListening={isListening} />
 
       {/* Botón de micrófono */}
       <div className="flex justify-center">
@@ -156,11 +161,11 @@ const VapiAtencionClienteComputadoras = () => {
         title="Información del Caso de Uso"
         description="José es un especialista en soporte técnico de TecnoNeuro con amplios conocimientos en hardware para PC usando VAPI. Puede ayudarte con procesadores, tarjetas gráficas, placas base, RAM, almacenamiento y más."
         additionalInfo={[
-          'Plataforma: VAPI',
-          'Modelo: GPT-4o',
-          'Transcripción: Deepgram',
-          'Voz: ElevenLabs',
-          'Especialidad: Hardware de PC'
+          "Plataforma: VAPI",
+          "Modelo: GPT-4o",
+          "Transcripción: Deepgram",
+          "Voz: ElevenLabs",
+          "Especialidad: Hardware de PC",
         ]}
       />
     </div>

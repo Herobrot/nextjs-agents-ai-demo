@@ -1,49 +1,49 @@
 // Tipos específicos para Vapi API
 
-export type VapiVoiceProvider = 
-  | 'openai' 
-  | 'cartesia' 
-  | 'azure' 
-  | 'custom-voice' 
-  | '11labs' 
-  | 'elevenlabs'  // Alias para 11labs
-  | 'hume' 
-  | 'lmnt' 
-  | 'neuphonic' 
-  | 'playht' 
-  | 'rime-ai' 
-  | 'smallest-ai' 
-  | 'tavus' 
-  | 'sesame' 
-  | 'minimax';
+export type VapiVoiceProvider =
+  | "openai"
+  | "cartesia"
+  | "azure"
+  | "custom-voice"
+  | "11labs"
+  | "elevenlabs" // Alias para 11labs
+  | "hume"
+  | "lmnt"
+  | "neuphonic"
+  | "playht"
+  | "rime-ai"
+  | "smallest-ai"
+  | "tavus"
+  | "sesame"
+  | "minimax";
 
-export type VapiTranscriberProvider = 
-  | 'deepgram' 
-  | 'rev' 
-  | 'azure' 
-  | 'aws' 
-  | 'google' 
-  | 'assembly' 
-  | 'speechmatics' 
-  | 'soniox' 
-  | 'gladia' 
-  | 'whisper' 
-  | 'openai';
+export type VapiTranscriberProvider =
+  | "deepgram"
+  | "rev"
+  | "azure"
+  | "aws"
+  | "google"
+  | "assembly"
+  | "speechmatics"
+  | "soniox"
+  | "gladia"
+  | "whisper"
+  | "openai";
 
-export type VapiModelProvider = 
-  | 'openai' 
-  | 'anthropic' 
-  | 'google' 
-  | 'azure' 
-  | 'groq' 
-  | 'deepseek' 
-  | 'together' 
-  | 'replicate' 
-  | 'huggingface' 
-  | 'cohere' 
-  | 'mistral' 
-  | 'perplexity' 
-  | 'custom';
+export type VapiModelProvider =
+  | "openai"
+  | "anthropic"
+  | "google"
+  | "azure"
+  | "groq"
+  | "deepseek"
+  | "together"
+  | "replicate"
+  | "huggingface"
+  | "cohere"
+  | "mistral"
+  | "perplexity"
+  | "custom";
 
 // Configuración base de voz
 export interface VapiVoiceConfig {
@@ -70,7 +70,7 @@ export interface VapiModelConfig {
   provider: VapiModelProvider;
   model: string;
   messages: Array<{
-    role: 'system' | 'user' | 'assistant';
+    role: "system" | "user" | "assistant";
     content: string;
   }>;
 }
