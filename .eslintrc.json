@@ -1,0 +1,79 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "extends": [
+    "plugin:react/recommended",
+    "plugin:eslint-comments/recommended",
+    "plugin:import/errors",
+    "plugin:import/warnings",
+    "plugin:prettier/recommended",
+    "plugin:@next/next/recommended",
+    "next/core-web-vitals",
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
+  "plugins": [
+    "import",
+    "prettier",
+    "eslint-comments",
+    "react",
+    "jsx-a11y",
+    "react-hooks"
+  ],
+  "rules": {
+    "@typescript-eslint/no-explicit-any": "off",
+    "no-unused-vars": "off",
+    "prettier/prettier": ["off"],
+    "import/no-duplicates": "off",
+    "no-use-before-define": "off",
+    "no-case-declarations": "off",
+    "@next/next/no-img-element": "off",
+    "no-underscore-dangle": "off",
+    "@typescript-eslint/no-unused-vars": "off",
+    "react/function-component-definition": "off",
+    "react/jsx-props-no-spreading": "off",
+    "react-hooks/exhaustive-deps": "off",
+    "@typescript-eslint/ban-types": "off",
+    "eslint-comments/disable-enable-pair": "off",
+    "@next/next/no-css-tags": "off",
+    "react/jsx-filename-extension": [
+      1,
+      { "extensions": [".js", ".jsx", ".ts", ".tsx"] }
+    ],
+    "no-param-reassign": "off",
+    "no-empty": "warn",
+    "import/no-unresolved": "off",
+    "import/no-extraneous-dependencies": [
+      "warn",
+      { "peerDependencies": false }
+    ],
+    "react/no-unescaped-entities": ["error", { "forbid": [">", "}"] }],
+    "jsx-a11y/label-has-associated-control": "off",
+    "react-hooks/rules-of-hooks": "error",
+    "react/no-arrow-function-lifecycle": "off",
+    "react/no-invalid-html-attribute": "off",
+    "react/no-unused-class-component-methods": "off",
+    "import/no-anonymous-default-export": [
+      "error",
+      {
+        "allowArray": true,
+        "allowArrowFunction": false,
+        "allowAnonymousClass": false,
+        "allowAnonymousFunction": false,
+        "allowCallExpression": true,
+        "allowLiteral": false,
+        "allowObject": true
+      }
+    ],
+    "react/require-default-props": [0]
+  },
+  "parser": "@typescript-eslint/parser",
+  "settings": {
+    "import/ignore": ["node_modules"]
+  }
+}

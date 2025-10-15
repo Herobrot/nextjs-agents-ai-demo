@@ -20,6 +20,18 @@ const eslintConfig = [
       "next-env.d.ts",
     ],
   },
+  {
+    files: ["**/*.ts", "**/*.tsx"],
+    languageOptions: {
+      parser: require.resolve("@typescript-eslint/parser"),
+    },
+    plugins: {
+      prettier: require("eslint-plugin-prettier"),
+    },
+    rules: {
+      "prettier/prettier": "error",
+    },
+  }
 ];
 
 export default eslintConfig;

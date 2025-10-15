@@ -1,7 +1,23 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  output: "export",
+  "distDir": "build",
+  "trailingSlash": true,
+  pageExtensions: ["ts", "tsx"],
+  poweredByHeader: false,
+  images: {
+    unoptimized: true,
+  },
+  compiler: {
+    styledComponents: true,
+  },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
 };
 
 export default nextConfig;
