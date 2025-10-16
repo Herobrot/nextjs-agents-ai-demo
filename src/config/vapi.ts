@@ -235,11 +235,15 @@ export const vapiConfig = {
           "Hola, soy María de TalentConnect. Gracias por tu tiempo. Tenemos 90 segundos para conocerte mejor. Empecemos: ¿Cuál ha sido tu logro profesional más importante y por qué?",
         voicemailMessage: "Por favor, llama de nuevo cuando estés disponible.",
         endCallMessage: "Hasta luego.",
-        endCallPhrases: ["gracias", "adiós", "hasta luego"],
+        endCallPhrases: [
+          "finalizar entrevista completamente",
+          "terminar llamada ahora",
+          "despedida final total"
+        ],
         silenceTimeoutSeconds: 15,
         responseDelaySeconds: 0.2,
         interruptionThreshold: 0.3,
-        maxDurationSeconds: 90,
+        maxDurationSeconds: 130,
 
         serverUrl: "",
         serverUrlSecret: "",
