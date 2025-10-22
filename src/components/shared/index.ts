@@ -12,3 +12,4 @@ export { default as QuickActions } from "./QuickActions";
 export { default as SampleTexts } from "./SampleTexts";
 export { default as StatusIndicators } from "./StatusIndicators";
 export { default as UseCaseInfo } from "./UseCaseInfo";
+export { default as MicIndicator } from "./MicIndicator";

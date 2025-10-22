@@ -238,7 +238,7 @@ export const vapiConfig = {
         endCallPhrases: [
           "finalizar entrevista completamente",
           "terminar llamada ahora",
-          "despedida final total"
+          "despedida final total",
         ],
         silenceTimeoutSeconds: 15,
         responseDelaySeconds: 0.2,

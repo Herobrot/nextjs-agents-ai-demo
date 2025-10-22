@@ -13,6 +13,8 @@ export const useVapiAgent = (useCase: VapiUseCaseKey): UseVapiReturn => {
   const [callId, setCallId] = useState<string | null>(null);
   const [callStatus, setCallStatus] = useState<string | null>(null);
   const [vapi, setVapi] = useState<Vapi | null>(null);
+  const [userTranscript, setUserTranscript] = useState<string>("");
+  const [isUserSpeaking, setIsUserSpeaking] = useState(false);
 
   const config = vapiConfig.useCases[useCase];
 
@@ -86,9 +88,32 @@ export const useVapiAgent = (useCase: VapiUseCaseKey): UseVapiReturn => {
 
     vapiInstance.on("message", (message: any) => {
       console.log("Vapi message:", message);
-      // Manejar mensajes del agente
+
       if (message.type === "transcript") {
-        console.log("Transcript:", message.transcript);
+        console.log("Transcript received:", {
+          role: message.role,
+          type: message.transcriptType,
+          content: message.transcript,
+        });
+
+        // Capturar transcripciones del USUARIO
+        if (message.role === "user") {
+          if (message.transcriptType === "partial") {
+            // Transcripción parcial - se actualiza mientras el usuario habla
+            setUserTranscript(message.transcript);
+            setIsUserSpeaking(true);
+          } else if (message.transcriptType === "final") {
+            // Transcripción final - cuando el usuario termina de hablar
+            setUserTranscript(message.transcript);
+            setIsUserSpeaking(false);
+            console.log("Final user transcript:", message.transcript);
+          }
+        }
+
+        // Capturar transcripciones del ASISTENTE
+        if (message.role === "assistant") {
+          console.log("Assistant transcript:", message.transcript);
+        }
       }
     });
 
@@ -112,6 +137,11 @@ export const useVapiAgent = (useCase: VapiUseCaseKey): UseVapiReturn => {
     return () => {
       vapiInstance?.stop();
     };
+  }, []);
+
+  const clearUserTranscript = useCallback(() => {
+    setUserTranscript("");
+    setIsUserSpeaking(false);
   }, []);
 
   const connect = useCallback(async () => {
@@ -388,5 +418,8 @@ export const useVapiAgent = (useCase: VapiUseCaseKey): UseVapiReturn => {
     isMuted,
     callId,
     callStatus,
+    userTranscript,
+    isUserSpeaking,
+    clearUserTranscript,
   };
 };

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useVapiAgent } from "../../../../hooks/useVapi";
 import {
   AgentHeader,
@@ -10,6 +10,7 @@ import {
   UseCaseInfo,
   MicButton,
   InterviewTimer,
+  MicIndicator
 } from "../../../../components/shared";
 
 const VapiEntrevistador = () => {
@@ -25,6 +26,11 @@ const VapiEntrevistador = () => {
   const [isInterviewFinished, setIsInterviewFinished] = useState(false);
   const [conversationTime, setConversationTime] = useState(0);
   const [timeRemaining, setTimeRemaining] = useState(90);
+  
+  // Estados para tracking de transcripción del usuario
+  const [currentUserSpeechStart, setCurrentUserSpeechStart] = useState<number>(0);
+  const [accumulatedUserTranscript, setAccumulatedUserTranscript] = useState("");
+  const userSpeechTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   const {
     isConnected,
@@ -39,13 +45,94 @@ const VapiEntrevistador = () => {
     sendMessage,
     toggleMute,
     isMuted,
-    callStatus,
+    userTranscript,
+    isUserSpeaking,
+    clearUserTranscript,
   } = useVapiAgent("entrevistador");
 
-  // SOLUCIÓN 1: Detectar automáticamente cuando la conversación ha iniciado
-  // Igual que en ElevenLabsEntrevistador
+  // Acumular transcripciones del usuario mientras habla
   useEffect(() => {
-    // Si hay actividad de conversación (speaking o listening), marcar como iniciada
+    if (isUserSpeaking && userTranscript) {
+      setAccumulatedUserTranscript(userTranscript);
+      console.log("📝 Transcripción acumulada:", userTranscript);
+    }
+  }, [isUserSpeaking, userTranscript]);
+
+  // Detectar cuando el usuario comienza a hablar y establecer timer de 30s
+  useEffect(() => {
+    if (isUserSpeaking && currentUserSpeechStart === 0) {
+      const startTime = Date.now();
+      setCurrentUserSpeechStart(startTime);
+      console.log("🎤 Usuario comenzó a hablar - iniciando timer de 30s");
+
+      // Establecer timer para interrumpir después de 30 segundos
+      userSpeechTimerRef.current = setTimeout(() => {
+        console.log("⏰ 30 segundos alcanzados - enviando señal de interrupción al agente");
+        
+        // Guardar lo que dijo hasta ahora
+        if (accumulatedUserTranscript) {
+          setConversationHistory((prev) => [
+            ...prev,
+            {
+              type: "user",
+              message: accumulatedUserTranscript,
+              timestamp: new Date(),
+            },
+          ]);
+        }
+
+        // SOLUCIÓN: Enviar un mensaje explícito al agente para que tome el turno
+        // Este mensaje es como un "comando" para que el agente interrumpa
+        sendMessage("INTERRUPCION_30_SEGUNDOS: El usuario ha estado hablando por 30 segundos. Por favor, interrumpe cortésmente y pasa a la siguiente pregunta.");
+        
+        console.log("📤 Señal de interrupción enviada al agente");
+        
+        // Limpiar
+        setAccumulatedUserTranscript("");
+        clearUserTranscript();
+        setCurrentUserSpeechStart(0);
+      }, 30000); // 30 segundos
+    }
+
+    // Limpiar timer si el usuario deja de hablar antes de 30s
+    if (!isUserSpeaking && currentUserSpeechStart > 0) {
+      const speakingDuration = (Date.now() - currentUserSpeechStart) / 1000;
+      console.log(`🎤 Usuario dejó de hablar después de ${speakingDuration.toFixed(1)}s`);
+      
+      // Solo guardar si NO fue interrumpido (menos de 30s)
+      if (speakingDuration < 30 && accumulatedUserTranscript) {
+        setConversationHistory((prev) => [
+          ...prev,
+          {
+            type: "user",
+            message: accumulatedUserTranscript,
+            timestamp: new Date(),
+          },
+        ]);
+        console.log("💾 Transcripción guardada:", accumulatedUserTranscript);
+      }
+
+      // Limpiar timer y estados
+      if (userSpeechTimerRef.current) {
+        clearTimeout(userSpeechTimerRef.current);
+        userSpeechTimerRef.current = null;
+      }
+      setAccumulatedUserTranscript("");
+      clearUserTranscript();
+      setCurrentUserSpeechStart(0);
+    }
+
+    // Cleanup
+    return () => {
+      if (userSpeechTimerRef.current) {
+        clearTimeout(userSpeechTimerRef.current);
+        userSpeechTimerRef.current = null;
+      }
+    };
+  }, [isUserSpeaking, currentUserSpeechStart, accumulatedUserTranscript, sendMessage, clearUserTranscript]);
+
+  // Detectar cuando la entrevista comienza
+  useEffect(() => {
     if (
       isConnected &&
       (isSpeaking || isListening || conversationTime > 0) &&
@@ -61,17 +148,24 @@ const VapiEntrevistador = () => {
     hasInterviewStarted,
   ]);
 
-  // SOLUCIÓN 2: Resetear estados cuando se desconecta
+  // Resetear estados cuando se desconecta
   useEffect(() => {
     if (!isConnected) {
       setHasInterviewStarted(false);
       setIsInterviewFinished(false);
       setConversationTime(0);
       setTimeRemaining(90);
+      setCurrentUserSpeechStart(0);
+      setAccumulatedUserTranscript("");
+      
+      if (userSpeechTimerRef.current) {
+        clearTimeout(userSpeechTimerRef.current);
+        userSpeechTimerRef.current = null;
+      }
     }
   }, [isConnected]);
 
-  // SOLUCIÓN 3: Timer que solo corre cuando la conversación ha iniciado
+  // Timer de la entrevista
   useEffect(() => {
     let interval: NodeJS.Timeout;
 
@@ -116,7 +210,6 @@ const VapiEntrevistador = () => {
   };
 
   const handleTimeUp = () => {
-    // Cuando se acaba el tiempo, enviar mensaje de finalización
     if (isConnected) {
       sendMessage("Gracias por tu tiempo, la entrevista ha terminado.");
       setIsInterviewFinished(true);
@@ -244,6 +337,11 @@ const VapiEntrevistador = () => {
     return "Responde las preguntas de la entrevista...";
   };
 
+  const getSpeechDuration = () => {
+    if (currentUserSpeechStart === 0) return 0;
+    return Math.floor((Date.now() - currentUserSpeechStart) / 1000);
+  };
+
   return (
     <div className="bg-gray-800 rounded-lg p-6 space-y-6">
       <AgentHeader
@@ -255,6 +353,14 @@ const VapiEntrevistador = () => {
       />
 
       <ErrorDisplay error={error} />
+
+      <MicIndicator
+        isUserSpeaking={isUserSpeaking}
+        transcript={accumulatedUserTranscript}
+        speechDuration={getSpeechDuration()}
+        maxDuration={30}
+        warningThreshold={25}
+      />
 
       {/* Temporizador de entrevista */}
       <div className={`rounded-lg p-6 ${getTimerContainerStyles()}`}>
@@ -273,7 +379,6 @@ const VapiEntrevistador = () => {
           </div>
         </div>
 
-        {/* CAMBIO CLAVE: Mostrar timer cuando hay actividad de conversación */}
         {isConnected && hasInterviewStarted && !isInterviewFinished ? (
           <InterviewTimer
             timeRemaining={timeRemaining}
@@ -365,6 +470,7 @@ const VapiEntrevistador = () => {
           "Evaluación: Competencias clave",
           "Estilo: Directo y eficiente",
           "Objetivo: Evaluación rápida de candidatos",
+          "⚡ Interrupción automática después de 30 segundos hablando",
         ]}
       />
 
@@ -377,8 +483,7 @@ const VapiEntrevistador = () => {
           <p>• Mantén tus respuestas concisas y específicas</p>
           <p>• Proporciona ejemplos concretos cuando sea posible</p>
           <p>
-            • La entrevistadora puede interrumpirte cortésmente para mantener el
-            tiempo
+            • ⚡ María te interrumpirá cortésmente si hablas por más de 30 segundos
           </p>
           <p>• Al final tendrás oportunidad de hacer una pregunta rápida</p>
           <p>• El tiempo total es de 90 segundos máximo</p>

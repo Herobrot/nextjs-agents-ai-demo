@@ -109,6 +109,9 @@ export interface UseVapiReturn {
   isMuted: boolean;
   callId: string | null;
   callStatus: string | null;
+  userTranscript: string;
+  isUserSpeaking: boolean;
+  clearUserTranscript: () => void;
 }
 
 // Configuración del caso de uso
