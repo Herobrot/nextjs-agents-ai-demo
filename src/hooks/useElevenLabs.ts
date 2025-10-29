@@ -1,15 +1,17 @@
+// src/hooks/useElevenLabs.ts
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useConversation } from "@elevenlabs/react";
-import { elevenLabsConfig, ExtendedUseCaseKey } from "../config/elevenlabs";
-import { getPromptForUseCase } from "../utils/promptLoader";
+import { elevenLabsConfig, UseCaseKey } from "../config/elevenlabs";
 import {
   UseElevenLabsReturn,
   isEntrevistadorConfig,
   hasConversationFlow,
+  hasLanguage,
+  hasVoiceId,
 } from "../types/elevenlabs.types";
 
 export const useElevenLabsAgent = (
-  useCase: ExtendedUseCaseKey,
+  useCase: UseCaseKey,
   onInterviewComplete?: (
     reason: "completed" | "time_up" | "candidate_request",
     message?: string,
@@ -35,20 +37,14 @@ export const useElevenLabsAgent = (
   const currentTranscriptRef = useRef<string>("");
   const isCapturingTranscriptRef = useRef(false);
 
-  const config =
-    useCase === "atencion-cliente-computadoras"
-      ? elevenLabsConfig.useCases["atencion-cliente"]
-      : elevenLabsConfig.useCases[useCase];
+  const config = elevenLabsConfig.useCases[useCase];
+  
+  if (!config) {
+    throw new Error(`Configuración no encontrada para el caso de uso: ${useCase}`);
+  }
 
-  const initialPrompt =
-    useCase === "atencion-cliente-computadoras"
-      ? getPromptForUseCase("atencion-cliente-computadoras")
-      : config.initialPrompt;
-
-  const firstMessage =
-    useCase === "atencion-cliente-computadoras"
-      ? "¡Hola! Soy tu asistente especializado en soporte técnico de computadoras. ¿En qué puedo ayudarte con tu equipo?"
-      : config.firstMessage;
+  const initialPrompt = config.initialPrompt;
+  const firstMessage = config.firstMessage;
 
   const conversationFlowConfig = hasConversationFlow(config.agentConfig)
     ? config.agentConfig.conversationFlow
@@ -72,31 +68,27 @@ export const useElevenLabsAgent = (
           prompt: initialPrompt,
         },
         firstMessage: firstMessage,
-        ...(isEntrevistador &&
-          isEntrevistadorConfig(config.agentConfig) && {
-            language: config.agentConfig.language,
-          }),
-      },
-      ...(isEntrevistador &&
-        isEntrevistadorConfig(config.agentConfig) && {
-          tts: {
-            voiceId: config.agentConfig.voiceId,
-          },
+        ...(hasLanguage(config.agentConfig) && {
+          language: config.agentConfig.language,
         }),
-    },
-    voiceSettings: config.agentConfig.voiceSettings,
-    ...(isEntrevistador &&
-      conversationFlowConfig?.enabled && {
-        conversationFlow: {
-          interruptionThreshold: conversationFlowConfig.interruptionThreshold,
-          maxResponseTime: conversationFlowConfig.maxResponseTime,
-          silenceTimeout: conversationFlowConfig.silenceTimeout,
-          enableInterruptions: conversationFlowConfig.enableInterruptions,
-          responseDelay: conversationFlowConfig.responseDelay,
+      },
+      ...(hasVoiceId(config.agentConfig) && {
+        tts: {
+          voiceId: config.agentConfig.voiceId,
         },
       }),
-    ...(isEntrevistador &&
-      isEntrevistadorConfig(config.agentConfig) &&
+    },
+    voiceSettings: config.agentConfig.voiceSettings,
+    ...(conversationFlowConfig?.enabled && {
+      conversationFlow: {
+        interruptionThreshold: conversationFlowConfig.interruptionThreshold,
+        maxResponseTime: conversationFlowConfig.maxResponseTime,
+        silenceTimeout: conversationFlowConfig.silenceTimeout,
+        enableInterruptions: conversationFlowConfig.enableInterruptions,
+        responseDelay: conversationFlowConfig.responseDelay,
+      },
+    }),
+    ...(isEntrevistadorConfig(config.agentConfig) &&
       config.agentConfig.tools && {
         tools: config.agentConfig.tools,
       }),
@@ -209,13 +201,12 @@ export const useElevenLabsAgent = (
       // ElevenLabs envía mensajes con el tipo 'user_transcript' durante la conversación
       console.log("Mensaje recibido: ", message);
     },
-    ...(isEntrevistador &&
-      conversationFlowConfig?.enabled && {
-        onInterruption: () => {
-          setIsInterrupted(true);
-          setTimeout(() => setIsInterrupted(false), 1000);
-        },
-      }),
+    ...(conversationFlowConfig?.enabled && {
+      onInterruption: () => {
+        setIsInterrupted(true);
+        setTimeout(() => setIsInterrupted(false), 1000);
+      },
+    }),
     ...(isEntrevistador && {
       onToolCall: (toolCall: any) => {
         if (toolCall.name === "end_interview") {

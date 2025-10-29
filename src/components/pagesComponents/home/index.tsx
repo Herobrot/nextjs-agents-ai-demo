@@ -8,6 +8,7 @@ import ElevenLabsAtencionClienteComputadoras from "./components/ElevenLabsAtenci
 import ElevenLabsAsistenteVirtual from "./components/ElevenLabsAsistenteVirtual";
 import ElevenLabsNarracionContenidos from "./components/ElevenLabsNarracionContenidos";
 import ElevenLabsEntrevistador from "./components/ElevenLabsEntrevistador";
+import ElevenLabsEntrevistadorAlimentos from "./components/ElevenLabsEntrevistadorAlimentos";
 import VapiAtencionCliente from "./components/VapiAtencionCliente";
 import VapiAtencionClienteComputadoras from "./components/VapiAtencionClienteComputadoras";
 import VapiAsistenteVirtual from "./components/VapiAsistenteVirtual";
@@ -43,6 +44,8 @@ const HomePage = () => {
         return <ElevenLabsNarracionContenidos />;
       case "entrevistador":
         return <ElevenLabsEntrevistador />;
+      case "entrevistador-alimentos":
+        return <ElevenLabsEntrevistadorAlimentos />;
       default:
         return <ElevenLabsAtencionCliente />;
     }
@@ -151,6 +154,7 @@ const HomePage = () => {
                   {selectedUseCase === "narracion-contenidos" &&
                     "Narración de Contenidos"}
                   {selectedUseCase === "entrevistador" && "Entrevistador"}
+                  {selectedUseCase === "entrevistador-alimentos" && "Entrevistador de Alimentos"}
                   {selectedUseCase === "test" && "Test VAPI"}
                   {selectedPlatform === "elevenlabs" && " (ElevenLabs)"}
                   {selectedPlatform === "vapi" && " (VAPI)"}
@@ -166,8 +170,8 @@ const HomePage = () => {
                     "Narrador profesional para contenido multimedia"}
                   {selectedUseCase === "entrevistador" &&
                     "Entrevistadora experta para evaluaciones de candidatos"}
-                  {selectedUseCase === "entrevistador" &&
-                    "Entrevistadora experta para evaluaciones de candidatos"}
+                  {selectedUseCase === "entrevistador-alimentos" &&
+                    "Entrevistador especializado en la industria alimentaria"}
                   {selectedUseCase === "test" &&
                     "Componente de prueba para verificar la conexión con VAPI"}
                 </p>

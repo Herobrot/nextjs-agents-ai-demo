@@ -14,8 +14,8 @@ export const vapiConfig = {
         voice: {
           provider: "cartesia" as const,
           voiceId: "34dbb662-8e98-413c-a1ef-1a3407675fe7" as const,
-          speed: 1.0,
-          pitch: 1.0,
+          speed: 1,
+          pitch: 1,
         },
 
         model: {
@@ -61,7 +61,7 @@ export const vapiConfig = {
           provider: "cartesia" as const,
           voiceId: "34dbb662-8e98-413c-a1ef-1a3407675fe7" as const,
           speed: 1.1,
-          pitch: 1.0,
+          pitch: 1,
         },
 
         model: {
@@ -159,7 +159,7 @@ export const vapiConfig = {
           provider: "cartesia" as const,
           voiceId: "34dbb662-8e98-413c-a1ef-1a3407675fe7" as const,
           speed: 0.95,
-          pitch: 1.0,
+          pitch: 1,
         },
 
         model: {

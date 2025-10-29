@@ -21,6 +21,7 @@ const UseCaseSelector = ({ selectedValue, onChange }: UseCaseSelectorProps) => {
           <option value="asistente-virtual">Asistente Virtual</option>
           <option value="narracion-contenidos">Narración de Contenidos</option>
           <option value="entrevistador">Entrevistador</option>
+          <option value="entrevistador-alimentos">Entrevistador de Alimentos</option>
           <option value="test">Test VAPI</option>
         </select>
         <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">

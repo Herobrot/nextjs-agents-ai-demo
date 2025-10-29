@@ -1,5 +1,4 @@
-// Interfaces para ElevenLabs Configuration
-
+// src/types/elevenlabs.types.ts
 export interface VoiceSettings {
   stability: number;
   similarityBoost: number;
@@ -38,6 +37,13 @@ export interface BaseAgentConfig {
   voiceSettings: VoiceSettings;
 }
 
+export interface ExtendedAgentConfig extends BaseAgentConfig {
+  voiceId?: string;
+  language?: string;
+  conversationFlow?: ConversationFlowConfig;
+  tools?: AgentTool[];
+}
+
 export interface EntrevistadorAgentConfig extends BaseAgentConfig {
   voiceId: string;
   language: string;
@@ -45,7 +51,7 @@ export interface EntrevistadorAgentConfig extends BaseAgentConfig {
   tools?: AgentTool[];
 }
 
-export type AgentConfig = BaseAgentConfig | EntrevistadorAgentConfig;
+export type AgentConfig = BaseAgentConfig | ExtendedAgentConfig | EntrevistadorAgentConfig;
 
 export interface UseCaseConfig {
   name: string;
@@ -53,6 +59,12 @@ export interface UseCaseConfig {
   initialPrompt: string;
   firstMessage: string;
   agentConfig: AgentConfig;
+}
+
+// Configuración completa de ElevenLabs
+export interface ElevenLabsConfig {
+  agentId: string;
+  useCases: Record<string, UseCaseConfig>;
 }
 
 // Interface para el hook useElevenLabs
@@ -83,12 +95,27 @@ export function isEntrevistadorConfig(
   config: AgentConfig,
 ): config is EntrevistadorAgentConfig {
   return (
-    "voiceId" in config && "language" in config && "conversationFlow" in config
+    "voiceId" in config && 
+    "language" in config && 
+    "conversationFlow" in config &&
+    config.conversationFlow !== undefined
   );
 }
 
 export function hasConversationFlow(
   config: AgentConfig,
 ): config is EntrevistadorAgentConfig {
-  return "conversationFlow" in config;
+  return "conversationFlow" in config && config.conversationFlow !== undefined;
+}
+
+export function hasVoiceId(
+  config: AgentConfig,
+): config is ExtendedAgentConfig | EntrevistadorAgentConfig {
+  return "voiceId" in config && config.voiceId !== undefined;
+}
+
+export function hasLanguage(
+  config: AgentConfig,
+): config is ExtendedAgentConfig | EntrevistadorAgentConfig {
+  return "language" in config && config.language !== undefined;
 }

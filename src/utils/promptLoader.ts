@@ -7,6 +7,7 @@ import {
   entrevistadorPromptElevenLabs,
   entrevistadorVapi,
 } from "../config/prompts/entrevistador";
+import { entrevistadorAlimentosPromptElevenLabs } from "@/config/prompts/entrevistador-alimentos";
 
 // Mapeo de prompts por caso de uso
 export const prompts = {
@@ -14,7 +15,8 @@ export const prompts = {
   "asistente-virtual": asistenteVirtualPrompt,
   "narracion-contenidos": narracionContenidosPrompt,
   "atencion-cliente-computadoras": atencionClienteComputadorasPrompt,
-  entrevistador: entrevistadorPromptElevenLabs,
+  "entrevistador": entrevistadorPromptElevenLabs,
+  "entrevistador-alimentos": entrevistadorAlimentosPromptElevenLabs,
 } as const;
 
 // Mapeo específico de prompts para VAPI
